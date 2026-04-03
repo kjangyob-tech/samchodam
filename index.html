@@ -22,14 +22,14 @@
       </button>
       <nav class="site-nav" id="primary-nav">
         <div class="site-nav__group">
-          <a href="#story" class="site-nav__parent">브랜드이야기</a>
+          <a href="#story" class="site-nav__parent">브랜드 이야기</a>
           <div class="site-nav__submenu">
             <a href="#story">브랜드 스토리</a>
             <a href="#values">핵심 가치</a>
           </div>
         </div>
         <div class="site-nav__group">
-          <a href="#products" class="site-nav__parent">제품소개</a>
+          <a href="#products" class="site-nav__parent">제품 소개</a>
           <div class="site-nav__submenu">
             <a href="#products">프리미엄 홍삼즙</a>
             <a href="#products">자연 구절초즙</a>
@@ -45,7 +45,7 @@
         </div>
         <a href="#products">제품둘러보기</a>
         <button class="site-nav__admin" type="button" data-admin-open>관리자</button>
-        <a class="site-nav__lang" href="index_en.html" hreflang="en">한/영</a>
+        <a class="site-nav__lang" href="index_en.html" hreflang="en"><span class="is-current">KOR</span><span class="site-nav__lang-divider">|</span><span>ENG</span></a>
       </nav>
     </div>
   </header>
@@ -58,11 +58,12 @@
         <p class="eyebrow">가족을 위해 시작된 진심</p>
         <h1>자연이 자라난 시간과<br>가족의 손길을 담은<br>건강 이야기</h1>
         <p class="hero__body">
-          금산에서 직접 재배한 인삼(홍삼)과 구절초로 신뢰와 정성을 가득 담아 전달합니다.
+          금산에서 직접 재배한 인삼(홍삼)과 구절초로<br>신뢰와 정성을 가득 담아 전달합니다.
         </p>
-          <a class="btn btn--primary" href="#products">제품 보기</a>
-          <a class="btn btn--ghost" href="#contact">고객센터</a>
-        </div>
+        <a class="hero__scroll" href="#story">
+          <span>Scroll Down</span>
+          <span class="hero__scroll-line" aria-hidden="true"></span>
+        </a>
       </div>
     </section>
 
@@ -70,13 +71,17 @@
       <div class="container story-grid">
         <div class="story-grid__copy fade-up">
           <p class="eyebrow">Brand Story</p>
-          <h2>삼초담(蔘草談) : 인삼 + 구절초 + 이야기</h2>
+          <p class="story-grid__subtitle">삼초담(蔘草談) : 인삼 + 구절초 + 이야기</p>
+          <h2>자연 그대로의<br>정직한 이야기</h2>
           <p>
-            자연 그대로의 정직한 이야기. 현대 사회는 건강에 대한 관심이 지속적으로 증가하며 자연식품과 전통 약초에 대한 수요가 빠르게 확대되고 있습니다. 하지만 기존 건강즙 시장은 대량 생산 라인에 의존하여 원료의 출처와 생산 과정의 투명성에 한계를 가지고 있습니다.
+            현대 사회는 건강에 대한 관심이 지속적으로 증가하며 자연식품과 전통 약초에 대한 수요가 빠르게 확대되고 있습니다. 하지만 기존 건강즙 시장은 대량 생산 라인에 의존하여 원료의 출처와 생산 과정의 투명성에 한계를 가지고 있습니다.
           </p>
           <p>
-            삼초담은 이러한 시장의 한계를 극복하고자, "직접 재배 → 직접 가공 → 직접 전달"의 구조를 통해 투명하고 정직한 건강 브랜드를 구축했습니다. 상업적 목적이 아닌 가족의 건강을 위해 시작된 진심, 가장 좋은 것을 주변 사람들과 나누는 과정 속에서 자연스럽게 확장된 믿음의 브랜드입니다.
+            삼초담은 이러한 시장의 한계를 극복하고자, <strong>"직접 재배 → 직접 가공 → 직접 전달"</strong>의 구조를 통해 투명하고 정직한 건강 브랜드를 구축했습니다.
           </p>
+          <div class="story-grid__quote">
+            <p>상업적 목적이 아닌 가족의 건강을 위해 시작된 진심. 가장 좋은 것을 주변 사람들과 나누는 과정 속에서 자연스럽게 확장된 믿음의 브랜드입니다.</p>
+          </div>
         </div>
         <figure class="story-grid__visual fade-in">
           <img src="assets/images/brand-story.png" alt="삼초담 브랜드 스토리 이미지">
@@ -126,7 +131,7 @@
         <div class="product-list">
           <article class="product-card fade-up">
             <div class="product-card__image">
-              <img src="assets/product_red_ginseng.png" alt="프리미엄 홍삼즙">
+              <img src="assets/images/red-ginseng.png" alt="프리미엄 홍삼즙">
             </div>
             <div class="product-card__body">
               <p class="product-card__tag">자연에서 자란 원료를 정직하게 담았습니다</p>
@@ -143,7 +148,7 @@
           </article>
           <article class="product-card product-card--reverse fade-up">
             <div class="product-card__image">
-              <img src="assets/product_gujeolcho.png" alt="자연 구절초즙">
+              <img src="assets/images/marsh-orchid.png" alt="자연 구절초즙">
             </div>
             <div class="product-card__body">
               <p class="product-card__tag">어머니의 지혜, 자연의 편안함</p>

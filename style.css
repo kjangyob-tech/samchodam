@@ -154,10 +154,22 @@ textarea {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 54px;
-    padding: 8px 12px;
+    gap: 8px;
+    min-width: 88px;
+    padding: 8px 14px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.site-nav__lang .is-current {
+    color: #fff;
+    font-weight: 700;
+}
+
+.site-nav__lang-divider {
+    opacity: 0.38;
 }
 
 .site-header.is-scrolled .site-nav__lang {
@@ -334,11 +346,45 @@ textarea {
     max-width: 560px;
 }
 
-.story-grid__copy p:not(.eyebrow),
+.story-grid__subtitle {
+    margin: 0 0 14px;
+    color: var(--color-accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+.story-grid__copy p:not(.eyebrow):not(.story-grid__subtitle),
 .contact-copy p {
     margin: 22px 0 0;
     color: var(--color-muted);
     font-size: 1.02rem;
+}
+
+.story-grid__quote {
+    position: relative;
+    margin-top: 30px;
+    padding: 28px 28px 24px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(66, 84, 55, 0.12);
+}
+
+.story-grid__quote::before {
+    content: '"';
+    position: absolute;
+    top: -18px;
+    left: 22px;
+    font-family: "Noto Serif KR", serif;
+    font-size: 4.2rem;
+    color: rgba(169, 130, 75, 0.28);
+}
+
+.story-grid__quote p {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: "Noto Serif KR", serif;
+    font-style: italic;
+    line-height: 1.9;
 }
 
 .story-grid__visual {
@@ -362,6 +408,12 @@ textarea {
 .section--values .eyebrow,
 .section--values .section-heading h2 {
     color: #fff;
+}
+.section--values .section-heading p {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.02rem;
+    font-weight: 500;
+    max-width: 560px;
 }
 
 .value-list {
