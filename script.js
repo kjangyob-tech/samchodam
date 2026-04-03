@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const isAdminAuthenticated = () => {
         const currentUser = refreshCurrentUser();
-        return Boolean((currentUser && currentUser.role === "admin") || window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "active");
+        return Boolean(currentUser && currentUser.role === "admin");
     };
 
     const registerUser = ({ name, email, password }) => {
@@ -278,7 +278,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const syncAuthUI = () => {
         const currentUser = refreshCurrentUser();
         const isLoggedIn = Boolean(currentUser);
+        const isAdminUser = Boolean(currentUser && currentUser.role === "admin");
         authGuest?.classList.toggle("hidden", isLoggedIn);
+        adminNavButtons.forEach((button) => {
+            button.classList.toggle("hidden", !isAdminUser);
+        });
 
         const applicantName = orderForm?.querySelector('input[name="applicant_name"]');
         const applicantPhone = orderForm?.querySelector('input[name="applicant_phone"]');
@@ -574,13 +578,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const openAdminModal = () => {
         if (!adminModal) return;
+        if (!isAdminAuthenticated()) {
+            openAuthModal("login");
+            if (authError) {
+                authError.textContent = "관리자 계정으로 로그인해 주세요.";
+            }
+            return;
+        }
         adminModal.classList.add("is-open");
         adminModal.setAttribute("aria-hidden", "false");
-        if (isAdminAuthenticated()) {
-            showAdminDashboard();
-        } else {
-            showAdminLogin();
-        }
+        showAdminDashboard();
         syncModalLock();
     };
 
@@ -748,16 +755,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         syncAuthUI();
         closeAuthModal();
-        if (result.user.role === "admin") {
-            window.sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
-        }
     });
 
     authLogoutButtons.forEach((button) => {
         button.addEventListener("click", () => {
             clearCurrentUser();
-            window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
-            syncAuthUI();
+                syncAuthUI();
             closeAdminModal();
         });
     });
@@ -767,26 +770,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     adminLoginForm?.addEventListener("submit", (event) => {
         event.preventDefault();
-        const password = new FormData(adminLoginForm).get("password");
-        if (String(password || "") !== ADMIN_PASSWORD) {
-            adminLoginError.textContent = "비밀번호가 올바르지 않습니다.";
-            return;
-        }
-        window.sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
-        adminLoginForm.reset();
-        showAdminDashboard();
+        adminLoginError.textContent = "관리자 계정으로 로그인한 뒤 이용해 주세요.";
     });
 
     adminRefresh?.addEventListener("click", renderAdminDashboard);
 
     adminLogout?.addEventListener("click", () => {
-        window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
-        const currentUser = refreshCurrentUser();
-        if (currentUser && currentUser.role === "admin") {
-            clearCurrentUser();
-            syncAuthUI();
-        }
-        showAdminLogin();
+        clearCurrentUser();
+        syncAuthUI();
+        closeAdminModal();
     });
 
     adminTabButtons.forEach((button) => {
