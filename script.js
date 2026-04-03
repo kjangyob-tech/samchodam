@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusLabels = {
         pending: "접수 대기",
         confirmed: "상담 완료",
-        shipped: "배송 진행"
+        shipped: "배송 진행",
+        delivered: "배송 완료"
     };
 
     const syncHeader = () => {
@@ -85,12 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const pendingCount = orders.filter((order) => order.status === "pending").length;
         const confirmedCount = orders.filter((order) => order.status === "confirmed").length;
         const shippedCount = orders.filter((order) => order.status === "shipped").length;
+        const deliveredCount = orders.filter((order) => order.status === "delivered").length;
 
         adminStats.innerHTML = [
             { label: "전체 주문", value: orders.length },
             { label: "접수 대기", value: pendingCount },
             { label: "상담 완료", value: confirmedCount },
-            { label: "배송 진행", value: shippedCount }
+            { label: "배송 진행", value: shippedCount },
+            { label: "배송 완료", value: deliveredCount }
         ].map((item) => `
             <article class="admin-stat-card">
                 <span>${item.label}</span>
@@ -130,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <option value="pending" ${order.status === "pending" ? "selected" : ""}>${statusLabels.pending}</option>
                             <option value="confirmed" ${order.status === "confirmed" ? "selected" : ""}>${statusLabels.confirmed}</option>
                             <option value="shipped" ${order.status === "shipped" ? "selected" : ""}>${statusLabels.shipped}</option>
+                            <option value="delivered" ${order.status === "delivered" ? "selected" : ""}>${statusLabels.delivered}</option>
                         </select>
                     </label>
                 </div>
