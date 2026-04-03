@@ -240,6 +240,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const syncContactTabWithHash = () => {
         if (window.location.hash === "#payment-info") {
             setActiveContactTab("deposit");
+        } else if (window.location.hash === "#contact-panel-lookup") {
+            setActiveContactTab("lookup");
+        } else if (window.location.hash === "#contact-panel-info") {
+            setActiveContactTab("info");
         } else if (window.location.hash === "#contact" || window.location.hash === "#contact-panel-order") {
             setActiveContactTab("order");
         }
@@ -465,6 +469,24 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('a[href="#payment-info"]').forEach((link) => {
         link.addEventListener("click", () => {
             setActiveContactTab("deposit");
+        });
+    });
+
+    document.querySelectorAll('a[href="#contact-panel-order"]').forEach((link) => {
+        link.addEventListener("click", () => {
+            setActiveContactTab("order");
+        });
+    });
+
+    document.querySelectorAll('a[href="#contact-panel-lookup"]').forEach((link) => {
+        link.addEventListener("click", () => {
+            setActiveContactTab("lookup");
+        });
+    });
+
+    document.querySelectorAll('a[href="#contact-panel-info"]').forEach((link) => {
+        link.addEventListener("click", () => {
+            setActiveContactTab("info");
         });
     });
 
