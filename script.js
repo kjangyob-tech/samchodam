@@ -1,9 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const ORDERS_KEY = "samchodam-orders";
+    const ADMIN_SESSION_KEY = "samchodam-admin-session";
+    const ADMIN_PASSWORD = "samchodam-admin";
+
     const header = document.querySelector(".site-header");
     const menuToggle = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".site-nav");
-    const form = document.querySelector(".contact-form");
+    const orderForm = document.querySelector("#order-form");
+    const formFeedback = document.querySelector("#form-feedback");
     const fadeTargets = document.querySelectorAll(".fade-up, .fade-in");
+    const adminModal = document.querySelector("#admin-modal");
+    const adminOpenButtons = document.querySelectorAll("[data-admin-open]");
+    const adminCloseButtons = document.querySelectorAll("[data-admin-close]");
+    const adminLoginView = document.querySelector("#admin-login-view");
+    const adminDashboardView = document.querySelector("#admin-dashboard-view");
+    const adminLoginForm = document.querySelector("#admin-login-form");
+    const adminLoginError = document.querySelector("#admin-login-error");
+    const adminStats = document.querySelector("#admin-stats");
+    const adminOrders = document.querySelector("#admin-orders");
+    const adminRefresh = document.querySelector("#admin-refresh");
+    const adminLogout = document.querySelector("#admin-logout");
+
+    const statusLabels = {
+        pending: "접수 대기",
+        confirmed: "상담 완료",
+        shipped: "배송 진행"
+    };
 
     const syncHeader = () => {
         if (!header) {
@@ -33,13 +55,154 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("menu-open");
     };
 
+    const getOrders = () => {
+        try {
+            return JSON.parse(window.localStorage.getItem(ORDERS_KEY) || "[]");
+        } catch (error) {
+            return [];
+        }
+    };
+
+    const saveOrders = (orders) => {
+        window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    };
+
+    const formatDate = (value) => {
+        return new Date(value).toLocaleString(document.documentElement.lang === "en" ? "en-US" : "ko-KR", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    };
+
+    const renderAdminStats = (orders) => {
+        if (!adminStats) {
+            return;
+        }
+
+        const pendingCount = orders.filter((order) => order.status === "pending").length;
+        const confirmedCount = orders.filter((order) => order.status === "confirmed").length;
+        const shippedCount = orders.filter((order) => order.status === "shipped").length;
+
+        adminStats.innerHTML = [
+            { label: "전체 주문", value: orders.length },
+            { label: "접수 대기", value: pendingCount },
+            { label: "상담 완료", value: confirmedCount },
+            { label: "배송 진행", value: shippedCount }
+        ].map((item) => `
+            <article class="admin-stat-card">
+                <span>${item.label}</span>
+                <strong>${item.value}</strong>
+            </article>
+        `).join("");
+    };
+
+    const renderOrders = () => {
+        if (!adminOrders) {
+            return;
+        }
+
+        const orders = getOrders().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        renderAdminStats(orders);
+
+        if (!orders.length) {
+            adminOrders.innerHTML = `
+                <div class="admin-empty">
+                    <p>아직 저장된 주문이 없습니다.</p>
+                    <span>주문 폼을 제출하면 이 브라우저의 관리자 모드에서 바로 확인할 수 있습니다.</span>
+                </div>
+            `;
+            return;
+        }
+
+        adminOrders.innerHTML = orders.map((order) => `
+            <article class="admin-order-card" data-order-id="${order.id}">
+                <div class="admin-order-card__head">
+                    <div>
+                        <p class="admin-order-card__title">${order.name} <span>${order.contact}</span></p>
+                        <p class="admin-order-card__meta">주문번호 ${order.id} · ${formatDate(order.createdAt)}</p>
+                    </div>
+                    <label class="status-select">
+                        <span class="sr-only">주문 상태</span>
+                        <select data-order-status>
+                            <option value="pending" ${order.status === "pending" ? "selected" : ""}>${statusLabels.pending}</option>
+                            <option value="confirmed" ${order.status === "confirmed" ? "selected" : ""}>${statusLabels.confirmed}</option>
+                            <option value="shipped" ${order.status === "shipped" ? "selected" : ""}>${statusLabels.shipped}</option>
+                        </select>
+                    </label>
+                </div>
+                <dl class="admin-order-grid">
+                    <div>
+                        <dt>제품</dt>
+                        <dd>${order.product}</dd>
+                    </div>
+                    <div>
+                        <dt>수량</dt>
+                        <dd>${order.quantity}박스</dd>
+                    </div>
+                    <div>
+                        <dt>메모</dt>
+                        <dd>${order.message ? order.message.replace(/</g, "&lt;") : "요청 사항 없음"}</dd>
+                    </div>
+                </dl>
+            </article>
+        `).join("");
+    };
+
+    const showAdminLogin = () => {
+        if (!adminLoginView || !adminDashboardView || !adminLoginError) {
+            return;
+        }
+
+        adminLoginView.classList.remove("hidden");
+        adminDashboardView.classList.add("hidden");
+        adminLoginError.textContent = "";
+    };
+
+    const showAdminDashboard = () => {
+        if (!adminLoginView || !adminDashboardView) {
+            return;
+        }
+
+        adminLoginView.classList.add("hidden");
+        adminDashboardView.classList.remove("hidden");
+        renderOrders();
+    };
+
+    const openAdminModal = () => {
+        if (!adminModal) {
+            return;
+        }
+
+        adminModal.classList.add("is-open");
+        adminModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        if (window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "active") {
+            showAdminDashboard();
+        } else {
+            showAdminLogin();
+        }
+    };
+
+    const closeAdminModal = () => {
+        if (!adminModal) {
+            return;
+        }
+
+        adminModal.classList.remove("is-open");
+        adminModal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    };
+
     syncHeader();
     window.addEventListener("scroll", syncHeader);
 
     if (menuToggle && nav) {
         menuToggle.addEventListener("click", () => {
             const expanded = menuToggle.getAttribute("aria-expanded") === "true";
-
             if (expanded) {
                 closeMenu();
             } else {
@@ -47,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        nav.querySelectorAll("a").forEach((link) => {
+        nav.querySelectorAll("a, button").forEach((link) => {
             link.addEventListener("click", () => {
                 if (window.innerWidth <= 960) {
                     closeMenu();
@@ -79,16 +242,100 @@ document.addEventListener("DOMContentLoaded", () => {
         fadeTargets.forEach((target) => observer.observe(target));
     }
 
-    if (form) {
-        form.addEventListener("submit", (event) => {
+    if (orderForm && formFeedback) {
+        orderForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            const isEnglish = document.documentElement.lang === "en";
-            const message = isEnglish
-                ? "This demo form does not send data yet. Connect it to your backend or form service next."
-                : "현재는 데모 폼이어서 실제 전송은 되지 않습니다. 다음 단계에서 백엔드나 폼 서비스와 연결하면 됩니다.";
+            const formData = new FormData(orderForm);
+            const order = {
+                id: `SC-${Date.now().toString().slice(-6)}`,
+                name: String(formData.get("name") || "").trim(),
+                contact: String(formData.get("contact") || "").trim(),
+                product: String(formData.get("product") || "").trim(),
+                quantity: Number(formData.get("quantity") || 1),
+                message: String(formData.get("message") || "").trim(),
+                status: "pending",
+                createdAt: new Date().toISOString()
+            };
 
-            window.alert(message);
+            const orders = getOrders();
+            orders.push(order);
+            saveOrders(orders);
+            orderForm.reset();
+            orderForm.querySelector('input[name="quantity"]').value = 1;
+            formFeedback.textContent = `${order.name}님의 주문이 접수되었습니다. 주문번호는 ${order.id} 입니다.`;
+            renderOrders();
         });
     }
+
+    adminOpenButtons.forEach((button) => {
+        button.addEventListener("click", openAdminModal);
+    });
+
+    adminCloseButtons.forEach((button) => {
+        button.addEventListener("click", closeAdminModal);
+    });
+
+    if (adminLoginForm && adminLoginError) {
+        adminLoginForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const password = new FormData(adminLoginForm).get("password");
+
+            if (password !== ADMIN_PASSWORD) {
+                adminLoginError.textContent = "비밀번호가 올바르지 않습니다.";
+                return;
+            }
+
+            window.sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
+            adminLoginForm.reset();
+            showAdminDashboard();
+        });
+    }
+
+    if (adminOrders) {
+        adminOrders.addEventListener("change", (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLSelectElement) || !target.matches("[data-order-status]")) {
+                return;
+            }
+
+            const card = target.closest("[data-order-id]");
+            if (!card) {
+                return;
+            }
+
+            const orderId = card.getAttribute("data-order-id");
+            const orders = getOrders();
+            const nextOrders = orders.map((order) => {
+                if (order.id !== orderId) {
+                    return order;
+                }
+
+                return {
+                    ...order,
+                    status: target.value
+                };
+            });
+
+            saveOrders(nextOrders);
+            renderOrders();
+        });
+    }
+
+    if (adminRefresh) {
+        adminRefresh.addEventListener("click", renderOrders);
+    }
+
+    if (adminLogout) {
+        adminLogout.addEventListener("click", () => {
+            window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+            showAdminLogin();
+        });
+    }
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeAdminModal();
+        }
+    });
 });
