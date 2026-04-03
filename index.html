@@ -543,7 +543,10 @@
           </label>
           <label>
             <span>비밀번호</span>
-            <input type="password" name="password" id="auth-password" placeholder="비밀번호를 입력하세요" required>
+            <div class="password-field">
+              <input type="password" name="password" id="auth-password" placeholder="비밀번호를 입력하세요" required>
+              <button class="password-field__toggle" type="button" data-password-toggle aria-label="비밀번호 보기">보기</button>
+            </div>
           </label>
           <button class="btn btn--primary btn--wide" type="submit" id="auth-submit">로그인하기</button>
           <p class="auth-box__error" id="auth-error" role="alert"></p>
@@ -564,7 +567,10 @@
         <form class="admin-login__form" id="admin-login-form">
           <label>
             <span>관리자 비밀번호</span>
-            <input type="password" name="password" placeholder="관리자 비밀번호" autocomplete="current-password" required>
+            <div class="password-field">
+              <input type="password" name="password" placeholder="관리자 비밀번호" autocomplete="current-password" required>
+              <button class="password-field__toggle" type="button" data-password-toggle aria-label="비밀번호 보기">보기</button>
+            </div>
           </label>
           <button class="btn btn--primary btn--wide" type="submit">관리자 입장</button>
           <p class="admin-login__error" id="admin-login-error" role="alert"></p>

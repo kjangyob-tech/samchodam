@@ -2602,6 +2602,33 @@ body.modal-open {
     font: inherit;
 }
 
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 78px;
+}
+
+.password-field__toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: var(--color-brand);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 8px;
+}
+
+.password-field__toggle:hover,
+.password-field__toggle:focus-visible {
+    color: var(--color-brand-strong);
+}
+
 .auth-box__error,
 .admin-login__error {
     min-height: 22px;

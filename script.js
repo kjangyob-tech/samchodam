@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const authUserName = document.querySelector("#auth-user-name");
     const authLogoutButtons = document.querySelectorAll("[data-auth-logout]");
     const adminNavButtons = document.querySelectorAll("[data-admin-open]");
+    const passwordToggleButtons = document.querySelectorAll("[data-password-toggle]");
 
     const tabButtons = document.querySelectorAll("[data-contact-tab]");
     const tabPanels = document.querySelectorAll("[data-contact-panel]");
@@ -720,6 +721,18 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", () => openAuthModal(button.getAttribute("data-auth-open")));
     });
     authCloseButtons.forEach((button) => button.addEventListener("click", closeAuthModal));
+
+    passwordToggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const field = button.closest(".password-field");
+            const input = field?.querySelector("input");
+            if (!(input instanceof HTMLInputElement)) return;
+            const reveal = input.type === "password";
+            input.type = reveal ? "text" : "password";
+            button.textContent = reveal ? "숨기기" : "보기";
+            button.setAttribute("aria-label", reveal ? "비밀번호 숨기기" : "비밀번호 보기");
+        });
+    });
 
     authSwitch?.addEventListener("click", () => {
         setAuthMode(authMode === "login" ? "signup" : "login");
