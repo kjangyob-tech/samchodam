@@ -278,13 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const syncAuthUI = () => {
         const currentUser = refreshCurrentUser();
         const isLoggedIn = Boolean(currentUser);
-        const isAdminUser = Boolean(currentUser && currentUser.role === "admin");
-
         authGuest?.classList.toggle("hidden", isLoggedIn);
         authUser?.classList.toggle("hidden", !isLoggedIn);
-        adminNavButtons.forEach((button) => {
-            button.classList.toggle("hidden", !isAdminUser);
-        });
         if (authUserName) {
             authUserName.textContent = currentUser ? `${currentUser.name}님` : "회원님";
         }
