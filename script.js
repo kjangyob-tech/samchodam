@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const ORDERS_KEY = "samchodam-orders";
+    const USER_STORAGE_KEY = "samchodam_users";
+    const CURRENT_USER_KEY = "samchodam_currentUser";
     const ADMIN_SESSION_KEY = "samchodam-admin-session";
     const ADMIN_PASSWORD = "samchodam-admin";
 
@@ -7,6 +9,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".site-nav");
     const fadeTargets = document.querySelectorAll(".fade-up, .fade-in");
+
+    const authModal = document.querySelector("#auth-modal");
+    const authOpenButtons = document.querySelectorAll("[data-auth-open]");
+    const authCloseButtons = document.querySelectorAll("[data-auth-close]");
+    const authForm = document.querySelector("#auth-form");
+    const authTitle = document.querySelector("#auth-title");
+    const authDesc = document.querySelector("#auth-desc");
+    const authNameGroup = document.querySelector("#auth-name-group");
+    const authNameInput = document.querySelector("#auth-name");
+    const authEmailInput = document.querySelector("#auth-email");
+    const authPasswordInput = document.querySelector("#auth-password");
+    const authSubmit = document.querySelector("#auth-submit");
+    const authSwitch = document.querySelector("#auth-switch");
+    const authError = document.querySelector("#auth-error");
+    const authGuest = document.querySelector("#auth-guest");
+    const authUser = document.querySelector("#auth-user");
+    const authUserName = document.querySelector("#auth-user-name");
+    const authLogoutButtons = document.querySelectorAll("[data-auth-logout]");
 
     const tabButtons = document.querySelectorAll("[data-contact-tab]");
     const tabPanels = document.querySelectorAll("[data-contact-panel]");
@@ -39,9 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const adminLoginForm = document.querySelector("#admin-login-form");
     const adminLoginError = document.querySelector("#admin-login-error");
     const adminStats = document.querySelector("#admin-stats");
-    const adminOrders = document.querySelector("#admin-orders");
     const adminRefresh = document.querySelector("#admin-refresh");
     const adminLogout = document.querySelector("#admin-logout");
+    const adminTabButtons = document.querySelectorAll("[data-admin-tab]");
+    const adminPanels = document.querySelectorAll("[data-admin-panel]");
+    const adminUsersTable = document.querySelector("#admin-users-table");
+    const adminOrdersTable = document.querySelector("#admin-orders-table");
 
     const statusLabels = {
         pending: "배송 준비중",
@@ -57,115 +80,241 @@ document.addEventListener("DOMContentLoaded", () => {
             tag: "자연에서 자란 원료를 정직하게 담았습니다",
             title: "프리미엄 홍삼즙",
             image: "assets/images/red-ginseng.png",
-            highlight: "비교불가의 대용량 110ml × 50포",
-            desc1: '1포에 "비교불가의 용량(약 110ml)"을 담았습니다. 시중 용량(90ml)보다 약 20% 이상의 넉넉한 용량입니다.',
-            desc2: "또한 시중의 홍삼달임액은 30포가 보통이지만, 과감하게 50포를 드립니다!",
+            highlight: "금산 청정 토양에서 자란 프리미엄 최고급 인삼으로 정성껏 달였습니다.",
+            desc1: "첨가물 없이 홍삼 고유의 진한 풍미를 그대로 담아낸 넉넉한 용량의 건강즙입니다.",
+            desc2: "바쁜 일상 속 부모님과 가족에게 전하는 따뜻하고 믿음직한 선물이 되도록 준비했습니다.",
             subtitle: "가족이 먹기 위해 시작된 건강한 이야기",
-            story: "금산의 비옥한 토양에서 직접 땀 흘려 재배한 인삼으로 제조한 홍삼만을 엄선하여 정성껏 달였습니다. 첨가물 한 방울 없이 자연 그대로 응축시킨 깊은 풍미가 매일 한 잔, 몸을 생각하는 작은 습관으로 이어지길 바랍니다.",
+            story: "금산의 비옥한 토양에서 직접 땀 흘려 재배한 인삼으로 제조한 홍삼만을 엄선하여 정성껏 달였습니다. 자연 그대로 응축시킨 깊은 풍미가 매일 한 잔, 몸을 생각하는 작은 습관으로 이어지길 바랍니다.",
             points: [
-                { tag: "철학1", content: "자연에서 자란 원료를 정직하게 담았습니다" },
-                { tag: "철학2", content: "매일 한 잔, 몸을 생각하는 작은 습관" },
-                { tag: "철학3", content: "가족이 먹기 위해 시작된 건강한 이야기" },
-                { tag: "철학4", content: "바쁜 일상 속, 균형을 위한 따뜻한 선택" }
+                { tag: "주원료", content: "금산 청정 토양에서 자란 프리미엄 최고급 인삼" },
+                { tag: "용량", content: "1박스 50포 구성으로 가족과 함께 꾸준히 드시기 좋습니다." },
+                { tag: "추천", content: "부모님 선물, 체력 관리, 매일의 루틴으로 권합니다." }
             ],
             instructions: [
-                { title: "1. 기본 음용 방법", text: ["1일 1~2회, 1포 섭취", "그대로 마시거나, 기호에 따라 물에 희석 가능", "파우치를 가볍게 흔든 후 섭취"] },
-                { title: "2. 시간대별 추천 음용", text: ["아침: 공복/식후 모두 가능. 하루 컨디션을 끌어올리는 효과", "오후: 점심 이후 나른할 때 1포, 업무 집중력 유지", "운동 전후: 운동 전 체력 보강, 운동 후 회복 보조"] },
-                { title: "3. 음용 팁", text: ["쓴맛이 강할 경우 꿀이나 따뜻한 물에 희석", "너무 뜨거운 물은 피하는 것이 좋습니다.", "카페인 음료와 동시 섭취는 줄이는 것이 좋습니다."] },
-                { title: "4. 주의사항", text: ["과다 섭취 시 두통·불면 가능성이 있으며, 늦은 밤 섭취는 피하는 것이 좋습니다.", "고혈압, 특정 질환, 약 복용 중일 경우 섭취에 주의 및 상담을 권장합니다."] }
+                { title: "섭취 방법", text: ["하루 1~2포를 가볍게 흔들어 섭취해 주세요.", "기호에 따라 차갑게 또는 데워서 드실 수 있습니다."] },
+                { title: "보관 안내", text: ["직사광선을 피해 서늘한 곳에 보관해 주세요.", "개봉 후에는 빠른 섭취를 권장드립니다."] }
             ]
         },
         "marsh-orchid": {
             tag: "어머니의 지혜, 자연의 편안함",
             title: "자연 구절초즙",
             image: "assets/images/marsh-orchid.png",
-            highlight: "비교불가의 대용량 115~120ml × 50포",
-            desc1: '1포에 "비교불가의 용량(약 115~120ml)"을 담았습니다. 시중 용량(90ml)보다 약 20~25% 이상의 넉넉한 용량입니다.',
-            desc2: "또한 시중의 액기스는 30포가 보통이지만, 과감하게 50포를 드립니다!",
-            subtitle: "딸이 시집갈 때 꼭 챙겨간 이유",
-            story: "음력 9월 9일이 되면 아홉 개의 마디가 생긴다 하여 구절초라 불립니다. 예로부터 딸이 시집갈 때 혼수 품목으로 꼭 챙겨 보내 상비약으로 달여 마시게 했던 약재이기도 합니다. 현대에도 구절초 베이비라는 말이 있을 정도로 여성에게 특효로 알려져 있습니다.",
+            highlight: "직접 재배한 구절초와 당귀, 대추를 듬뿍 넣고 달인 깊은 맛의 건강즙입니다.",
+            desc1: "여성의 건강과 몸의 따뜻함을 돕는 전통적인 지혜를 부드럽고 쌉싸름한 자연의 맛으로 담았습니다.",
+            desc2: "자극적이지 않은 편안한 풍미로 하루를 정리하는 시간에도 잘 어울립니다.",
+            subtitle: "자연이 들려주는 편안한 하루의 리듬",
+            story: "가을 산기슭을 수놓는 구절초를 중심으로 당귀와 대추를 함께 달여 부드러운 풍미와 은은한 향을 살렸습니다. 자연에서 온 재료를 정직하게 달여낸 한 포가 몸과 마음을 편안하게 채워주길 바랍니다.",
             points: [
-                { tag: "효능1", content: "강장, 항균, 항염, 면역증진 효과" },
-                { tag: "효능2", content: "소염, 진통, 스트레스 완화" },
-                { tag: "효능3", content: "수족냉증 등 냉증 개선" },
-                { tag: "효능4", content: "생리불순, 난임 등 여성 건강 관리" },
-                { tag: "효능5", content: "심혈관 질환 예방 및 혈관 보호" }
+                { tag: "주원료", content: "직접 재배한 구절초 + 당귀 + 대추를 듬뿍 넣고 달인 즙" },
+                { tag: "풍미", content: "부드럽고 은은한 쌉싸름함이 특징입니다." },
+                { tag: "추천", content: "몸을 따뜻하게 돌보고 싶은 분께 권합니다." }
             ],
-            source: { url: "https://www.hidoc.co.kr/healthstory/news/C0000493617", text: "참고 자료 | 하이닥" },
             instructions: [
-                { title: "1. 기본 섭취량", text: "1일 1~2회, 1회 1포 섭취를 권장하며 파우치를 잘 흔든 후 그대로 드시면 됩니다." },
-                { title: "2. 처음 드실 때", text: "구절초액을 컵에 따르고 뜨거운 물을 섞어서 드세요. 하루 1포 섭취를 추천합니다." },
-                { title: "3. 섭취 팁", text: "한두 달 정도 드신 후에 점점 양을 늘리셔도 되지만 하루 두 포를 넘기지 않는 것을 추천합니다." },
-                { title: "4. 주의사항", text: "식전·식후 모두 무관하나, 위가 약하시거나 공복에 속이 불편하면 식후 섭취를 권장합니다. 카페인 음료와 동시 섭취는 피하시고, 특정 질환이나 임신 중인 경우 전문 상담 후 드세요." }
+                { title: "섭취 방법", text: ["하루 1~2포를 따뜻하게 데워 드시면 더욱 부드럽습니다.", "식후 또는 오후 휴식 시간에 섭취하시면 좋습니다."] },
+                { title: "보관 안내", text: ["직사광선을 피해 서늘한 곳에 보관해 주세요.", "파우치 손상 시 섭취하지 마시고 교환 문의를 남겨주세요."] }
             ]
         }
     };
 
-    const syncHeader = () => {
-        if (header) {
-            header.classList.toggle("is-scrolled", window.scrollY > 24);
+    let authMode = "login";
+    let adminTab = "users";
+
+    const safeParse = (value, fallback) => {
+        try {
+            return JSON.parse(value || "");
+        } catch (error) {
+            return fallback;
         }
+    };
+
+    const escapeHtml = (value) => String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const formatDate = (value) => {
+        if (!value) return "-";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "-";
+        return new Intl.DateTimeFormat("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        }).format(date);
+    };
+
+    const getUsers = () => safeParse(window.localStorage.getItem(USER_STORAGE_KEY), []);
+    const saveUsers = (users) => window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+    const getOrders = () => safeParse(window.localStorage.getItem(ORDERS_KEY), []);
+    const saveOrders = (orders) => window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    const getCurrentUser = () => safeParse(window.localStorage.getItem(CURRENT_USER_KEY), null);
+    const setCurrentUser = (user) => window.localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    const clearCurrentUser = () => window.localStorage.removeItem(CURRENT_USER_KEY);
+
+    const ensureAdminSeed = () => {
+        const users = getUsers();
+        const hasAdmin = users.some((user) => user.role === "admin");
+        if (hasAdmin) return;
+
+        users.push({
+            name: "운영자",
+            email: "admin",
+            password: ADMIN_PASSWORD,
+            role: "admin",
+            date: new Date().toISOString()
+        });
+        saveUsers(users);
+    };
+
+    const refreshCurrentUser = () => {
+        const currentUser = getCurrentUser();
+        if (!currentUser) return null;
+
+        const latest = getUsers().find((user) => user.email === currentUser.email);
+        if (!latest) {
+            clearCurrentUser();
+            return null;
+        }
+
+        setCurrentUser(latest);
+        return latest;
+    };
+
+    const isAdminAuthenticated = () => {
+        const currentUser = refreshCurrentUser();
+        return Boolean((currentUser && currentUser.role === "admin") || window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "active");
+    };
+
+    const registerUser = ({ name, email, password }) => {
+        const users = getUsers();
+        const normalizedEmail = String(email || "").trim();
+        if (users.find((user) => user.email === normalizedEmail)) {
+            return { error: "이미 가입된 이메일입니다." };
+        }
+
+        const newUser = {
+            name: String(name || "").trim(),
+            email: normalizedEmail,
+            password: String(password || "").trim(),
+            role: "user",
+            date: new Date().toISOString()
+        };
+        users.push(newUser);
+        saveUsers(users);
+        return { success: true, user: newUser };
+    };
+
+    const loginUser = ({ email, password }) => {
+        const users = getUsers();
+        const user = users.find((item) => item.email === String(email || "").trim() && item.password === String(password || "").trim());
+        if (!user) {
+            return { error: "이메일 또는 비밀번호가 일치하지 않습니다." };
+        }
+
+        setCurrentUser(user);
+        return { success: true, user };
     };
 
     const closeMenu = () => {
         if (!menuToggle || !nav) return;
         menuToggle.setAttribute("aria-expanded", "false");
         nav.classList.remove("is-open");
-        document.body.classList.remove("menu-open");
     };
 
     const openMenu = () => {
         if (!menuToggle || !nav) return;
         menuToggle.setAttribute("aria-expanded", "true");
         nav.classList.add("is-open");
-        document.body.classList.add("menu-open");
     };
 
-    const normalizeOrder = (order) => {
-        const status = order.status in statusLabels ? order.status : "preparing";
-        const applicantName = order.applicantName || order.name || "";
-        const applicantPhone = order.applicantPhone || order.contact || "";
-
-        return {
-            id: order.id,
-            product: order.product || "",
-            quantity: Number(order.quantity || 1),
-            applicantName,
-            applicantPhone,
-            recipientName: order.recipientName || applicantName,
-            recipientPhone: order.recipientPhone || applicantPhone,
-            address: order.address || "주소 정보 없음",
-            trackingNumber: order.trackingNumber || "",
-            message: order.message || "",
-            status,
-            createdAt: order.createdAt || order.date || new Date().toISOString()
-        };
+    const syncHeader = () => {
+        if (!header) return;
+        header.classList.toggle("is-scrolled", window.scrollY > 20);
     };
 
-    const getOrders = () => {
-        try {
-            const orders = JSON.parse(window.localStorage.getItem(ORDERS_KEY) || "[]");
-            return orders.map(normalizeOrder);
-        } catch (error) {
-            return [];
+    const syncModalLock = () => {
+        const hasOpenModal = [authModal, productModal, adminModal].some((modal) => modal && modal.classList.contains("is-open"));
+        document.body.classList.toggle("modal-open", hasOpenModal);
+    };
+
+    const setAuthMode = (mode) => {
+        authMode = mode === "signup" ? "signup" : "login";
+        if (!authTitle || !authDesc || !authNameGroup || !authSubmit || !authSwitch || !authNameInput || !authError) return;
+
+        const isSignup = authMode === "signup";
+        authTitle.textContent = isSignup ? "회원가입" : "로그인";
+        authDesc.textContent = isSignup ? "정직한 자연의 가치를 함께 할 가족이 되어주세요." : "삼초담의 회원이 되어주세요.";
+        authSubmit.textContent = isSignup ? "가입 완료하기" : "로그인하기";
+        authSwitch.textContent = isSignup ? "로그인" : "회원가입";
+        authNameGroup.classList.toggle("hidden", !isSignup);
+        authNameInput.required = isSignup;
+        authError.textContent = "";
+    };
+
+    const openAuthModal = (mode = "login") => {
+        if (!authModal || !authForm) return;
+        setAuthMode(mode);
+        authForm.reset();
+        authModal.classList.add("is-open");
+        authModal.setAttribute("aria-hidden", "false");
+        syncModalLock();
+        window.setTimeout(() => {
+            (authMode === "signup" ? authNameInput : authEmailInput)?.focus();
+        }, 30);
+    };
+
+    const closeAuthModal = () => {
+        if (!authModal) return;
+        authModal.classList.remove("is-open");
+        authModal.setAttribute("aria-hidden", "true");
+        syncModalLock();
+    };
+
+    const syncAuthUI = () => {
+        const currentUser = refreshCurrentUser();
+        const isLoggedIn = Boolean(currentUser);
+
+        authGuest?.classList.toggle("hidden", isLoggedIn);
+        authUser?.classList.toggle("hidden", !isLoggedIn);
+        if (authUserName) {
+            authUserName.textContent = currentUser ? `${currentUser.name} 님` : "회원님";
+        }
+
+        const applicantName = orderForm?.querySelector('input[name="applicant_name"]');
+        const applicantPhone = orderForm?.querySelector('input[name="applicant_phone"]');
+        if (currentUser && applicantName && !applicantName.value.trim()) {
+            applicantName.value = currentUser.name || "";
+        }
+        if (currentUser && applicantPhone && currentUser.phone && !applicantPhone.value.trim()) {
+            applicantPhone.value = currentUser.phone;
         }
     };
 
-    const saveOrders = (orders) => {
-        window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    };
-
-    const formatDate = (value) => {
-        const date = new Date(value);
-        return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
-    };
-
-    const cleanPhone = (value) => String(value || "").replace(/[^0-9]/g, "");
+    const normalizeOrder = (order) => ({
+        id: order.id,
+        product: order.product,
+        quantity: Number(order.quantity || 1),
+        applicantName: order.applicantName,
+        applicantPhone: order.applicantPhone,
+        recipientName: order.recipientName || order.applicantName,
+        recipientPhone: order.recipientPhone,
+        address: order.address,
+        message: order.message || "",
+        createdAt: order.createdAt || new Date().toISOString(),
+        status: order.status || "preparing",
+        trackingNumber: order.trackingNumber || "",
+        memberEmail: order.memberEmail || ""
+    });
 
     const getOrdersByPhone = (phone) => {
-        const target = cleanPhone(phone);
+        const normalized = String(phone || "").replace(/\D/g, "");
+        if (!normalized) return [];
         return getOrders()
-            .filter((order) => cleanPhone(order.applicantPhone) === target || cleanPhone(order.recipientPhone) === target)
+            .filter((order) => String(order.applicantPhone || order.recipientPhone || "").replace(/\D/g, "") === normalized || String(order.recipientPhone || "").replace(/\D/g, "") === normalized)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     };
 
@@ -204,20 +353,20 @@ document.addEventListener("DOMContentLoaded", () => {
             <article class="lookup-card">
                 <div class="lookup-card__main">
                     <div class="lookup-card__meta">
-                        <span>${order.id}</span>
+                        <span>${escapeHtml(order.id)}</span>
                         <i></i>
-                        <strong>${formatDate(order.createdAt)} 신청</strong>
+                        <strong>${escapeHtml(formatDate(order.createdAt))} 신청</strong>
                     </div>
-                    <h3>${order.product} <strong>${order.quantity}박스</strong></h3>
+                    <h3>${escapeHtml(order.product)} <strong>${escapeHtml(String(order.quantity))}박스</strong></h3>
                     <div class="lookup-card__info">
-                        <p><span>수령인 (연락처)</span><strong>${order.recipientName || order.applicantName} <em>(${order.recipientPhone})</em></strong></p>
-                        <p class="lookup-card__info--wide"><span>배송지 도착 주소</span><strong>${order.address}</strong></p>
+                        <p><span>수령인 (연락처)</span><strong>${escapeHtml(order.recipientName || order.applicantName)} <em>(${escapeHtml(order.recipientPhone)})</em></strong></p>
+                        <p class="lookup-card__info--wide"><span>배송지 도착 주소</span><strong>${escapeHtml(order.address)}</strong></p>
                     </div>
                 </div>
                 <div class="lookup-card__status-area">
                     <p>현재 배송 상태</p>
-                    <span class="${getLookupStatusClass(order.status)}">${statusLabels[order.status] || order.status}</span>
-                    ${order.status === "shipped" && order.trackingNumber ? `<div class="lookup-card__tracking"><span>운송장 번호</span><strong>${order.trackingNumber}</strong></div>` : `<small>출고 작업이 완료되고 택배사로 인계되면<br>운송장 번호가 표시됩니다.</small>`}
+                    <span class="${getLookupStatusClass(order.status)}">${escapeHtml(statusLabels[order.status] || order.status)}</span>
+                    ${order.status === "shipped" && order.trackingNumber ? `<div class="lookup-card__tracking"><span>운송장 번호</span><strong>${escapeHtml(order.trackingNumber)}</strong></div>` : order.status === "delivered" && order.trackingNumber ? `<div class="lookup-card__tracking"><span>배송완료 운송장</span><strong>${escapeHtml(order.trackingNumber)}</strong></div>` : `<small>출고 작업이 완료되고 택배사로 인계되면<br>운송장 번호가 표시됩니다.</small>`}
                 </div>
             </article>
         `).join("");
@@ -244,100 +393,14 @@ document.addEventListener("DOMContentLoaded", () => {
             setActiveContactTab("lookup");
         } else if (window.location.hash === "#contact-panel-info") {
             setActiveContactTab("info");
-        } else if (window.location.hash === "#contact" || window.location.hash === "#contact-panel-order") {
+        } else {
             setActiveContactTab("order");
         }
     };
 
-    const renderAdminStats = (orders) => {
-        if (!adminStats) return;
-
-        const preparing = orders.filter((order) => ["pending", "confirmed", "preparing"].includes(order.status)).length;
-        const shipped = orders.filter((order) => order.status === "shipped").length;
-        const delivered = orders.filter((order) => order.status === "delivered").length;
-        const canceled = orders.filter((order) => order.status === "canceled").length;
-
-        adminStats.innerHTML = [
-            { label: "전체 주문", value: orders.length },
-            { label: "배송 준비중", value: preparing },
-            { label: "배송중", value: shipped },
-            { label: "배송완료", value: delivered },
-            { label: "주문 취소", value: canceled }
-        ].map((item) => `
-            <article class="admin-stat-card">
-                <span>${item.label}</span>
-                <strong>${item.value}</strong>
-            </article>
-        `).join("");
-    };
-
-    const renderOrders = () => {
-        if (!adminOrders) return;
-
-        const orders = getOrders().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        renderAdminStats(orders);
-
-        if (!orders.length) {
-            adminOrders.innerHTML = `
-                <div class="admin-empty">
-                    <p>아직 저장된 주문이 없습니다.</p>
-                    <span>구입 신청서가 접수되면 이 브라우저의 관리자 모드에서 바로 확인할 수 있습니다.</span>
-                </div>
-            `;
-            return;
-        }
-
-        adminOrders.innerHTML = orders.map((order) => `
-            <article class="admin-order-card" data-order-id="${order.id}">
-                <div class="admin-order-card__head">
-                    <div>
-                        <p class="admin-order-card__title">${order.applicantName} <span>${order.applicantPhone}</span></p>
-                        <p class="admin-order-card__meta">주문번호 ${order.id} · ${formatDate(order.createdAt)}</p>
-                    </div>
-                    <label class="status-select">
-                        <span class="sr-only">주문 상태</span>
-                        <select data-order-status>
-                            <option value="preparing" ${["pending", "confirmed", "preparing"].includes(order.status) ? "selected" : ""}>배송 준비중</option>
-                            <option value="shipped" ${order.status === "shipped" ? "selected" : ""}>배송중</option>
-                            <option value="delivered" ${order.status === "delivered" ? "selected" : ""}>배송완료</option>
-                            <option value="canceled" ${order.status === "canceled" ? "selected" : ""}>주문 취소</option>
-                        </select>
-                    </label>
-                </div>
-                <dl class="admin-order-grid">
-                    <div><dt>신청 제품</dt><dd>${order.product}</dd></div>
-                    <div><dt>수량</dt><dd>${order.quantity}박스</dd></div>
-                    <div><dt>신청자</dt><dd>${order.applicantName} / ${order.applicantPhone}</dd></div>
-                    <div><dt>수령인</dt><dd>${order.recipientName} / ${order.recipientPhone}</dd></div>
-                    <div><dt>주소</dt><dd>${order.address}</dd></div>
-                    <div><dt>메모</dt><dd>${order.message ? order.message.replace(/</g, "&lt;") : "요청 사항 없음"}</dd></div>
-                </dl>
-            </article>
-        `).join("");
-    };
-
-    const showAdminLogin = () => {
-        if (!adminLoginView || !adminDashboardView || !adminLoginError) return;
-        adminLoginView.classList.remove("hidden");
-        adminDashboardView.classList.add("hidden");
-        adminLoginError.textContent = "";
-    };
-
-    const showAdminDashboard = () => {
-        if (!adminLoginView || !adminDashboardView) return;
-        adminLoginView.classList.add("hidden");
-        adminDashboardView.classList.remove("hidden");
-        renderOrders();
-    };
-
-    const syncModalLock = () => {
-        const hasOpenModal = (productModal && productModal.classList.contains("is-open")) || (adminModal && adminModal.classList.contains("is-open"));
-        document.body.classList.toggle("modal-open", hasOpenModal);
-    };
-
     const renderProductModal = (productId) => {
         const data = productDetails[productId];
-        if (!data || !productModalImage || !productModalTitle) return;
+        if (!data) return;
 
         productModalImage.src = data.image;
         productModalImage.alt = data.title;
@@ -349,43 +412,22 @@ document.addEventListener("DOMContentLoaded", () => {
         productModalSubtitle.textContent = data.subtitle;
         productModalStory.textContent = data.story;
 
-        productModalPoints.innerHTML = "";
-        data.points.forEach((point) => {
-            const article = document.createElement("article");
-            article.className = "product-modal__point";
-            const strong = document.createElement("strong");
-            strong.textContent = point.tag;
-            const span = document.createElement("span");
-            span.textContent = point.content;
-            article.append(strong, span);
-            productModalPoints.appendChild(article);
-        });
+        productModalPoints.innerHTML = data.points.map((point) => `
+            <article class="product-modal__point">
+                <strong>${escapeHtml(point.tag)}</strong>
+                <span>${escapeHtml(point.content)}</span>
+            </article>
+        `).join("");
 
-        productModalInstructions.innerHTML = "";
-        data.instructions.forEach((item) => {
-            const article = document.createElement("article");
-            article.className = "product-modal__instruction";
-            const title = document.createElement("h3");
-            title.textContent = item.title;
-            const desc = document.createElement("p");
-            desc.textContent = Array.isArray(item.text) ? item.text.map((line) => `• ${line}`).join("\n") : item.text;
-            article.append(title, desc);
-            productModalInstructions.appendChild(article);
-        });
+        productModalInstructions.innerHTML = data.instructions.map((item) => `
+            <article class="product-modal__instruction">
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${item.text.map((line) => `• ${escapeHtml(line)}`).join("<br>")}</p>
+            </article>
+        `).join("");
 
-        if (data.source) {
-            productModalSource.classList.remove("hidden");
-            productModalSource.innerHTML = "";
-            const link = document.createElement("a");
-            link.href = data.source.url;
-            link.target = "_blank";
-            link.rel = "noreferrer";
-            link.textContent = data.source.text;
-            productModalSource.appendChild(link);
-        } else {
-            productModalSource.classList.add("hidden");
-            productModalSource.innerHTML = "";
-        }
+        productModalSource.classList.add("hidden");
+        productModalSource.innerHTML = "";
     };
 
     const openProductModal = (productId) => {
@@ -403,17 +445,147 @@ document.addEventListener("DOMContentLoaded", () => {
         syncModalLock();
     };
 
+    const renderAdminStats = () => {
+        if (!adminStats) return;
+        const users = getUsers();
+        const orders = getOrders().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const preparing = orders.filter((order) => ["pending", "confirmed", "preparing"].includes(order.status)).length;
+        const shipped = orders.filter((order) => order.status === "shipped").length;
+        const delivered = orders.filter((order) => order.status === "delivered").length;
+
+        adminStats.innerHTML = [
+            { label: "전체 회원", value: users.length },
+            { label: "전체 주문", value: orders.length },
+            { label: "배송 준비중", value: preparing },
+            { label: "배송중 / 완료", value: `${shipped} / ${delivered}` }
+        ].map((item) => `
+            <article class="admin-stat-card">
+                <span>${escapeHtml(item.label)}</span>
+                <strong>${escapeHtml(String(item.value))}</strong>
+            </article>
+        `).join("");
+    };
+
+    const setAdminTab = (tabName) => {
+        adminTab = tabName === "orders" ? "orders" : "users";
+        adminTabButtons.forEach((button) => {
+            const active = button.getAttribute("data-admin-tab") === adminTab;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        adminPanels.forEach((panel) => {
+            const active = panel.getAttribute("data-admin-panel") === adminTab;
+            panel.classList.toggle("is-active", active);
+            panel.hidden = !active;
+        });
+    };
+
+    const renderUsersTable = () => {
+        if (!adminUsersTable) return;
+
+        const users = getUsers().sort((a, b) => new Date(b.date) - new Date(a.date));
+        const currentUser = refreshCurrentUser();
+        if (!users.length) {
+            adminUsersTable.innerHTML = '<tr><td colspan="5" class="admin-table__empty">아직 가입된 회원이 없습니다.</td></tr>';
+            return;
+        }
+
+        adminUsersTable.innerHTML = users.map((user) => {
+            const isCurrent = currentUser && currentUser.email === user.email;
+            return `
+                <tr>
+                    <td>${escapeHtml(formatDate(user.date))}</td>
+                    <td class="admin-table__name">${escapeHtml(user.name)}</td>
+                    <td>${escapeHtml(user.email)}</td>
+                    <td><span class="admin-badge admin-badge--${escapeHtml(user.role)}">${user.role === "admin" ? "관리자" : "일반회원"}</span></td>
+                    <td>
+                        ${isCurrent ? '<span class="admin-inline-note">현재 로그인</span>' : `<button class="admin-action-button" type="button" data-role-toggle="${escapeHtml(user.email)}">${user.role === "admin" ? "관리자 해임" : "관리자 임명"}</button>`}
+                    </td>
+                </tr>
+            `;
+        }).join("");
+    };
+
+    const renderOrdersTable = () => {
+        if (!adminOrdersTable) return;
+
+        const orders = getOrders().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        if (!orders.length) {
+            adminOrdersTable.innerHTML = '<tr><td colspan="6" class="admin-table__empty">아직 저장된 주문이 없습니다.</td></tr>';
+            return;
+        }
+
+        adminOrdersTable.innerHTML = orders.map((order) => `
+            <tr data-order-id="${escapeHtml(order.id)}">
+                <td>
+                    <strong class="admin-order-id">${escapeHtml(order.id)}</strong>
+                    <span class="admin-order-date">${escapeHtml(formatDate(order.createdAt))}</span>
+                </td>
+                <td>
+                    <div class="admin-order-stack">
+                        <strong>${escapeHtml(order.memberEmail || "비회원 주문")}</strong>
+                        <span>${escapeHtml(order.applicantName)} / ${escapeHtml(order.applicantPhone)}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="admin-order-stack">
+                        <strong>${escapeHtml(order.product)}</strong>
+                        <span>${escapeHtml(String(order.quantity))}박스</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="admin-order-stack">
+                        <strong>${escapeHtml(order.recipientName || order.applicantName)} / ${escapeHtml(order.recipientPhone)}</strong>
+                        <span>${escapeHtml(order.address)}</span>
+                    </div>
+                </td>
+                <td>
+                    <select class="admin-status-select" data-order-status>
+                        <option value="preparing" ${["pending", "confirmed", "preparing"].includes(order.status) ? "selected" : ""}>배송 준비중</option>
+                        <option value="shipped" ${order.status === "shipped" ? "selected" : ""}>배송중</option>
+                        <option value="delivered" ${order.status === "delivered" ? "selected" : ""}>배송완료</option>
+                        <option value="canceled" ${order.status === "canceled" ? "selected" : ""}>주문 취소</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="admin-order-controls">
+                        <input class="admin-track-input" type="text" value="${escapeHtml(order.trackingNumber)}" placeholder="운송장 번호" data-order-tracking>
+                        <button class="admin-action-button admin-action-button--solid" type="button" data-order-save>저장</button>
+                    </div>
+                </td>
+            </tr>
+        `).join("");
+    };
+
+    const renderAdminDashboard = () => {
+        renderAdminStats();
+        renderUsersTable();
+        renderOrdersTable();
+        setAdminTab(adminTab);
+    };
+
+    const showAdminLogin = () => {
+        adminLoginError.textContent = "";
+        adminLoginView.classList.remove("hidden");
+        adminDashboardView.classList.add("hidden");
+    };
+
+    const showAdminDashboard = () => {
+        adminLoginView.classList.add("hidden");
+        adminDashboardView.classList.remove("hidden");
+        renderAdminDashboard();
+    };
+
     const openAdminModal = () => {
         if (!adminModal) return;
         adminModal.classList.add("is-open");
         adminModal.setAttribute("aria-hidden", "false");
-        syncModalLock();
-
-        if (window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "active") {
+        if (isAdminAuthenticated()) {
             showAdminDashboard();
         } else {
             showAdminLogin();
         }
+        syncModalLock();
     };
 
     const closeAdminModal = () => {
@@ -423,7 +595,26 @@ document.addEventListener("DOMContentLoaded", () => {
         syncModalLock();
     };
 
+    const updateOrderFromRow = (row) => {
+        const orderId = row.getAttribute("data-order-id");
+        const statusInput = row.querySelector("[data-order-status]");
+        const trackingInput = row.querySelector("[data-order-tracking]");
+        const orders = getOrders().map((order) => order.id === orderId ? {
+            ...order,
+            status: statusInput.value,
+            trackingNumber: trackingInput.value.trim()
+        } : order);
+        saveOrders(orders);
+        renderAdminDashboard();
+        if (lookupPhone && lookupPhone.value.trim()) {
+            renderLookupResults(getOrdersByPhone(lookupPhone.value));
+        }
+    };
+
+    ensureAdminSeed();
     syncHeader();
+    syncAuthUI();
+    renderLookupResults([]);
     window.addEventListener("scroll", syncHeader);
 
     if (menuToggle && nav) {
@@ -435,16 +626,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         nav.querySelectorAll("a, button").forEach((link) => {
             link.addEventListener("click", () => {
-                if (window.innerWidth <= 960) {
-                    closeMenu();
-                }
+                if (window.innerWidth <= 960) closeMenu();
             });
         });
 
         window.addEventListener("resize", () => {
-            if (window.innerWidth > 960) {
-                closeMenu();
-            }
+            if (window.innerWidth > 960) closeMenu();
         });
     }
 
@@ -456,7 +643,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 revealObserver.unobserve(entry.target);
             });
         }, { threshold: 0.18 });
-
         fadeTargets.forEach((target) => observer.observe(target));
     }
 
@@ -467,47 +653,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll('a[href="#payment-info"]').forEach((link) => {
-        link.addEventListener("click", () => {
-            setActiveContactTab("deposit");
-        });
+        link.addEventListener("click", () => setActiveContactTab("deposit"));
     });
-
     document.querySelectorAll('a[href="#contact-panel-order"]').forEach((link) => {
-        link.addEventListener("click", () => {
-            setActiveContactTab("order");
-        });
+        link.addEventListener("click", () => setActiveContactTab("order"));
     });
-
     document.querySelectorAll('a[href="#contact-panel-lookup"]').forEach((link) => {
-        link.addEventListener("click", () => {
-            setActiveContactTab("lookup");
-        });
+        link.addEventListener("click", () => setActiveContactTab("lookup"));
     });
-
     document.querySelectorAll('a[href="#contact-panel-info"]').forEach((link) => {
-        link.addEventListener("click", () => {
-            setActiveContactTab("info");
-        });
+        link.addEventListener("click", () => setActiveContactTab("info"));
     });
 
     window.addEventListener("hashchange", syncContactTabWithHash);
     syncContactTabWithHash();
 
-    productOpenButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            openProductModal(button.getAttribute("data-product-open"));
-        });
-    });
-
-    productCloseButtons.forEach((button) => {
-        button.addEventListener("click", closeProductModal);
-    });
-
     if (orderForm && formFeedback) {
         orderForm.addEventListener("submit", (event) => {
             event.preventDefault();
-
             const data = new FormData(orderForm);
+            const currentUser = refreshCurrentUser();
             const applicantPhone = String(data.get("applicant_phone") || "").trim();
             const order = normalizeOrder({
                 id: `ORD-${Date.now().toString().slice(-6)}`,
@@ -518,24 +683,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 recipientName: String(data.get("recipient_name") || "").trim() || String(data.get("applicant_name") || "").trim(),
                 recipientPhone: String(data.get("recipient_phone") || "").trim(),
                 address: String(data.get("address") || "").trim(),
-                status: "preparing",
                 createdAt: new Date().toISOString(),
-                message: ""
+                status: "preparing",
+                message: "",
+                memberEmail: currentUser ? currentUser.email : ""
             });
-
             const orders = getOrders();
             orders.push(order);
             saveOrders(orders);
             formFeedback.textContent = `신청이 완료되었습니다. 주문번호는 ${order.id} 입니다.`;
             orderForm.reset();
-
-            if (lookupPhone) {
-                lookupPhone.value = applicantPhone;
-            }
-
+            syncAuthUI();
+            if (lookupPhone) lookupPhone.value = applicantPhone;
             renderLookupResults(getOrdersByPhone(applicantPhone));
             setActiveContactTab("lookup");
-            renderOrders();
+            renderAdminDashboard();
         });
     }
 
@@ -546,66 +708,126 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    adminOpenButtons.forEach((button) => {
-        button.addEventListener("click", openAdminModal);
+    productOpenButtons.forEach((button) => {
+        button.addEventListener("click", () => openProductModal(button.getAttribute("data-product-open")));
+    });
+    productCloseButtons.forEach((button) => button.addEventListener("click", closeProductModal));
+
+    authOpenButtons.forEach((button) => {
+        button.addEventListener("click", () => openAuthModal(button.getAttribute("data-auth-open")));
+    });
+    authCloseButtons.forEach((button) => button.addEventListener("click", closeAuthModal));
+
+    authSwitch?.addEventListener("click", () => {
+        setAuthMode(authMode === "login" ? "signup" : "login");
     });
 
-    adminCloseButtons.forEach((button) => {
-        button.addEventListener("click", closeAdminModal);
-    });
+    authForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        authError.textContent = "";
+        const payload = {
+            name: authNameInput.value,
+            email: authEmailInput.value,
+            password: authPasswordInput.value
+        };
 
-    if (adminLoginForm && adminLoginError) {
-        adminLoginForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const password = new FormData(adminLoginForm).get("password");
-
-            if (password !== ADMIN_PASSWORD) {
-                adminLoginError.textContent = "비밀번호가 올바르지 않습니다.";
+        if (authMode === "signup") {
+            const result = registerUser(payload);
+            if (result.error) {
+                authError.textContent = result.error;
                 return;
             }
+            setAuthMode("login");
+            authForm.reset();
+            authEmailInput.value = payload.email;
+            authError.textContent = "회원가입이 완료되었습니다. 로그인해 주세요.";
+            return;
+        }
 
+        const result = loginUser(payload);
+        if (result.error) {
+            authError.textContent = result.error;
+            return;
+        }
+
+        syncAuthUI();
+        closeAuthModal();
+        if (result.user.role === "admin") {
             window.sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
-            adminLoginForm.reset();
-            showAdminDashboard();
-        });
-    }
-
-    if (adminOrders) {
-        adminOrders.addEventListener("change", (event) => {
-            const target = event.target;
-            if (!(target instanceof HTMLSelectElement) || !target.matches("[data-order-status]")) return;
-
-            const card = target.closest("[data-order-id]");
-            if (!card) return;
-
-            const orderId = card.getAttribute("data-order-id");
-            const nextOrders = getOrders().map((order) => order.id === orderId ? { ...order, status: target.value } : order);
-            saveOrders(nextOrders);
-            renderOrders();
-
-            if (lookupPhone && lookupPhone.value.trim()) {
-                renderLookupResults(getOrdersByPhone(lookupPhone.value));
-            }
-        });
-    }
-
-    if (adminRefresh) {
-        adminRefresh.addEventListener("click", renderOrders);
-    }
-
-    if (adminLogout) {
-        adminLogout.addEventListener("click", () => {
-            window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
-            showAdminLogin();
-        });
-    }
-
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            closeProductModal();
-            closeAdminModal();
         }
     });
 
-    renderLookupResults([]);
+    authLogoutButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            clearCurrentUser();
+            window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+            syncAuthUI();
+            closeAdminModal();
+        });
+    });
+
+    adminOpenButtons.forEach((button) => button.addEventListener("click", openAdminModal));
+    adminCloseButtons.forEach((button) => button.addEventListener("click", closeAdminModal));
+
+    adminLoginForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const password = new FormData(adminLoginForm).get("password");
+        if (String(password || "") !== ADMIN_PASSWORD) {
+            adminLoginError.textContent = "비밀번호가 올바르지 않습니다.";
+            return;
+        }
+        window.sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
+        adminLoginForm.reset();
+        showAdminDashboard();
+    });
+
+    adminRefresh?.addEventListener("click", renderAdminDashboard);
+
+    adminLogout?.addEventListener("click", () => {
+        window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        const currentUser = refreshCurrentUser();
+        if (currentUser && currentUser.role === "admin") {
+            clearCurrentUser();
+            syncAuthUI();
+        }
+        showAdminLogin();
+    });
+
+    adminTabButtons.forEach((button) => {
+        button.addEventListener("click", () => setAdminTab(button.getAttribute("data-admin-tab")));
+    });
+
+    adminUsersTable?.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || !target.matches("[data-role-toggle]")) return;
+        const email = target.getAttribute("data-role-toggle");
+        const users = getUsers();
+        const nextUsers = users.map((user) => user.email === email ? { ...user, role: user.role === "admin" ? "user" : "admin" } : user);
+        saveUsers(nextUsers);
+        syncAuthUI();
+        renderAdminDashboard();
+    });
+
+    adminOrdersTable?.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || !target.matches("[data-order-save]")) return;
+        const row = target.closest("tr[data-order-id]");
+        if (!row) return;
+        updateOrderFromRow(row);
+    });
+
+    adminOrdersTable?.addEventListener("change", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement) || !target.matches("[data-order-status]")) return;
+        const row = target.closest("tr[data-order-id]");
+        if (!row) return;
+        updateOrderFromRow(row);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        closeAuthModal();
+        closeProductModal();
+        closeAdminModal();
+    });
 });
