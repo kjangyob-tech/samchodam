@@ -279,10 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentUser = refreshCurrentUser();
         const isLoggedIn = Boolean(currentUser);
         authGuest?.classList.toggle("hidden", isLoggedIn);
-        authUser?.classList.toggle("hidden", !isLoggedIn);
-        if (authUserName) {
-            authUserName.textContent = currentUser ? `${currentUser.name}님` : "회원님";
-        }
 
         const applicantName = orderForm?.querySelector('input[name="applicant_name"]');
         const applicantPhone = orderForm?.querySelector('input[name="applicant_phone"]');
