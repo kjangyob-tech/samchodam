@@ -2,12 +2,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const ORDERS_KEY = "samchodam-orders";
     const ADMIN_SESSION_KEY = "samchodam-admin-session";
     const ADMIN_PASSWORD = "samchodam-admin";
+    const SHIPPING_ENDPOINT = "https://formspree.io/f/mnjobelb";
 
     const header = document.querySelector(".site-header");
     const menuToggle = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".site-nav");
     const orderForm = document.querySelector("#order-form");
     const formFeedback = document.querySelector("#form-feedback");
+    const shippingForm = document.querySelector("#shipping-form");
+    const shippingFeedback = document.querySelector("#shipping-feedback");
     const fadeTargets = document.querySelectorAll(".fade-up, .fade-in");
     const adminModal = document.querySelector("#admin-modal");
     const adminOpenButtons = document.querySelectorAll("[data-admin-open]");
@@ -269,6 +272,32 @@ document.addEventListener("DOMContentLoaded", () => {
             orderForm.querySelector('input[name="quantity"]').value = 1;
             formFeedback.textContent = `${order.name}님의 주문이 접수되었습니다. 주문번호는 ${order.id} 입니다.`;
             renderOrders();
+        });
+    }
+
+    if (shippingForm && shippingFeedback) {
+        shippingForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            shippingFeedback.textContent = "배송 문의를 전송 중입니다.";
+
+            try {
+                const response = await fetch(SHIPPING_ENDPOINT, {
+                    method: "POST",
+                    body: new FormData(shippingForm),
+                    headers: {
+                        Accept: "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("failed");
+                }
+
+                shippingForm.reset();
+                shippingFeedback.textContent = "배송 문의가 접수되었습니다. 메일함에서 Formspree 수신 내역을 확인해 주세요.";
+            } catch (error) {
+                shippingFeedback.textContent = "전송에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+            }
         });
     }
 

@@ -24,7 +24,7 @@
         <a href="#story">브랜드 스토리</a>
         <a href="#values">핵심 가치</a>
         <a href="#products">제품 소개</a>
-        <a href="#contact">주문 문의</a>
+        <a href="#contact">고객센터</a>
         <button class="site-nav__admin" type="button" data-admin-open>관리자</button>
         <a class="site-nav__lang" href="index_en.html" hreflang="en">ENG</a>
       </nav>
@@ -44,7 +44,7 @@
         </p>
         <div class="hero__actions">
           <a class="btn btn--primary" href="#products">제품 보기</a>
-          <a class="btn btn--ghost" href="#contact">주문 접수</a>
+          <a class="btn btn--ghost" href="#contact">고객센터</a>
         </div>
       </div>
     </section>
@@ -147,22 +147,27 @@
         <p class="eyebrow">Daily Ritual</p>
         <h2>몸을 챙기는 시간도<br>브랜드의 태도처럼 단정하게.</h2>
         <p>한 번의 강한 인상보다 오래 남는 신뢰를 위해, 삼초담은 원물과 설명을 과장하지 않습니다.</p>
-        <a class="btn btn--primary" href="#contact">주문 남기기</a>
+        <a class="btn btn--primary" href="#contact">고객센터 가기</a>
       </div>
     </section>
 
     <section class="section section--contact" id="contact">
       <div class="container contact-grid contact-grid--wide">
         <div class="contact-copy fade-up">
-          <p class="eyebrow">Order Desk</p>
-          <h2>주문을 남기면 관리자 모드에서 바로 확인할 수 있습니다.</h2>
+          <p class="eyebrow">Customer Center</p>
+          <h2>고객센터에서 주문 접수와 배송 문의를 함께 처리합니다.</h2>
           <p>
-            고객명, 연락처, 제품, 수량, 요청사항을 저장해 두고 관리자 모드에서 접수 현황을 파악할 수 있도록 구성했습니다.
+            주문 접수는 현재 브라우저에 저장되고, 배송 문의는 Formspree로 메일 접수됩니다.
+            고객센터 안에서 주문과 배송 관련 문의를 함께 받을 수 있도록 구성했습니다.
           </p>
           <dl class="contact-facts">
             <div>
               <dt>주문 저장 방식</dt>
               <dd>브라우저 로컬 저장소(localStorage)</dd>
+            </div>
+            <div>
+              <dt>배송 문의 접수</dt>
+              <dd>Formspree 연동 메일 수신</dd>
             </div>
             <div>
               <dt>관리자 확인 항목</dt>
@@ -175,39 +180,94 @@
           </dl>
           <button class="btn btn--secondary contact-copy__admin" type="button" data-admin-open>관리자 모드 열기</button>
         </div>
-        <form class="contact-form fade-up" id="order-form">
-          <div class="form-grid">
+        <div class="contact-stack">
+          <form class="contact-form fade-up" id="order-form">
+            <p class="contact-form__title">고객센터 · 주문 접수</p>
+            <div class="form-grid">
+              <label>
+                <span>주문자 이름</span>
+                <input type="text" name="name" placeholder="이름을 입력하세요" required>
+              </label>
+              <label>
+                <span>연락처</span>
+                <input type="text" name="contact" placeholder="전화번호 또는 이메일" required>
+              </label>
+            </div>
+            <div class="form-grid">
+              <label>
+                <span>주문 제품</span>
+                <select name="product" required>
+                  <option value="프리미엄 홍삼즙">프리미엄 홍삼즙</option>
+                  <option value="자연 구절초즙">자연 구절초즙</option>
+                  <option value="두 제품 모두">두 제품 모두</option>
+                </select>
+              </label>
+              <label>
+                <span>수량</span>
+                <input type="number" name="quantity" min="1" step="1" value="1" required>
+              </label>
+            </div>
             <label>
-              <span>주문자 이름</span>
-              <input type="text" name="name" placeholder="이름을 입력하세요" required>
+              <span>요청 사항</span>
+              <textarea name="message" rows="5" placeholder="배송 요청, 상담 내용 등을 남겨주세요."></textarea>
             </label>
+            <button class="btn btn--primary" type="submit">주문 접수하기</button>
+            <p class="form-note">정적 데모이므로 서버 전송은 없고, 현재 브라우저에 주문 내역이 저장됩니다.</p>
+            <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+          </form>
+
+          <form class="contact-form contact-form--shipping fade-up" id="shipping-form" action="https://formspree.io/f/mnjobelb" method="POST">
+            <p class="contact-form__title">고객센터 · 배송 문의</p>
+            <p class="contact-form__lead">주문번호와 연락처를 남기면 배송 관련 문의가 메일로 접수됩니다.</p>
+            <input type="hidden" name="_subject" value="삼초담 배송문의 접수">
+            <div class="form-grid">
+              <label>
+                <span>주문번호</span>
+                <input type="text" name="order_id" placeholder="예: SC-123456" required>
+              </label>
+              <label>
+                <span>이름</span>
+                <input type="text" name="name" placeholder="이름을 입력하세요" required>
+              </label>
+            </div>
+            <div class="form-grid">
+              <label>
+                <span>연락처</span>
+                <input type="text" name="contact" placeholder="전화번호 또는 이메일" required>
+              </label>
+              <label>
+                <span>문의 유형</span>
+                <select name="inquiry_type" required>
+                  <option value="배송 상태 확인">배송 상태 확인</option>
+                  <option value="배송 지연 문의">배송 지연 문의</option>
+                  <option value="수령 후 문의">수령 후 문의</option>
+                </select>
+              </label>
+            </div>
             <label>
-              <span>연락처</span>
-              <input type="text" name="contact" placeholder="전화번호 또는 이메일" required>
+              <span>문의 내용</span>
+              <textarea name="message" rows="5" placeholder="현재 배송 상황이나 문의 내용을 입력해주세요." required></textarea>
             </label>
-          </div>
-          <div class="form-grid">
-            <label>
-              <span>주문 제품</span>
-              <select name="product" required>
-                <option value="프리미엄 홍삼즙">프리미엄 홍삼즙</option>
-                <option value="자연 구절초즙">자연 구절초즙</option>
-                <option value="두 제품 모두">두 제품 모두</option>
-              </select>
-            </label>
-            <label>
-              <span>수량</span>
-              <input type="number" name="quantity" min="1" step="1" value="1" required>
-            </label>
-          </div>
-          <label>
-            <span>요청 사항</span>
-            <textarea name="message" rows="5" placeholder="배송 요청, 상담 내용 등을 남겨주세요."></textarea>
-          </label>
-          <button class="btn btn--primary" type="submit">주문 접수하기</button>
-          <p class="form-note">정적 데모이므로 서버 전송은 없고, 현재 브라우저에 주문 내역이 저장됩니다.</p>
-          <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
-        </form>
+            <button class="btn btn--primary" type="submit">배송 문의 보내기</button>
+            <p class="form-note">Formspree로 전송되며, 접수 후 확인 메일함에서 문의를 확인할 수 있습니다.</p>
+            <p class="form-feedback" id="shipping-feedback" role="status" aria-live="polite"></p>
+          </form>
+
+          <section class="contact-form contact-form--comments fade-up" aria-labelledby="comments-title">
+            <p class="contact-form__title" id="comments-title">고객센터 · 댓글 상담</p>
+            <p class="contact-form__lead">배송문의 아래에서 추가 상황을 댓글로 남길 수 있습니다.</p>
+            <div id="disqus_thread"></div>
+            <script>
+                (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://samchodam.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </section>
+        </div>
       </div>
     </section>
   </main>
@@ -221,7 +281,7 @@
       <div class="site-footer__links">
         <a href="#story">브랜드 스토리</a>
         <a href="#products">제품 소개</a>
-        <a href="#contact">주문 문의</a>
+        <a href="#contact">고객센터</a>
         <button class="footer-admin-link" type="button" data-admin-open>관리자 모드</button>
       </div>
     </div>

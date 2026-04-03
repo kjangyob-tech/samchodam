@@ -1004,3 +1004,34 @@ body.modal-open {
         align-items: stretch;
     }
 }
+
+.contact-stack {
+    display: grid;
+    gap: 18px;
+}
+
+.contact-form__title {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.contact-form__lead {
+    margin: -6px 0 4px;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+}
+
+.contact-form--shipping {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(246, 241, 231, 0.96) 100%);
+}
+
+.contact-form--comments {
+    overflow: hidden;
+}
+
+#disqus_thread {
+    margin-top: 8px;
+}
