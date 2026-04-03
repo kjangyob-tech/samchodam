@@ -1,0 +1,34 @@
+name: Deploy Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-pages-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check required secrets
+        run: |
+          test -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" || { echo "Missing CLOUDFLARE_API_TOKEN"; exit 1; }
+          test -n "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" || { echo "Missing CLOUDFLARE_ACCOUNT_ID"; exit 1; }
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=samchodam --branch=main
