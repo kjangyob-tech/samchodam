@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const authUser = document.querySelector("#auth-user");
     const authUserName = document.querySelector("#auth-user-name");
     const authLogoutButtons = document.querySelectorAll("[data-auth-logout]");
+    const adminNavButtons = document.querySelectorAll("[data-admin-open]");
 
     const tabButtons = document.querySelectorAll("[data-contact-tab]");
     const tabPanels = document.querySelectorAll("[data-contact-panel]");
@@ -277,11 +278,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const syncAuthUI = () => {
         const currentUser = refreshCurrentUser();
         const isLoggedIn = Boolean(currentUser);
+        const isAdminUser = Boolean(currentUser && currentUser.role === "admin");
 
         authGuest?.classList.toggle("hidden", isLoggedIn);
         authUser?.classList.toggle("hidden", !isLoggedIn);
+        adminNavButtons.forEach((button) => {
+            button.classList.toggle("hidden", !isAdminUser);
+        });
         if (authUserName) {
-            authUserName.textContent = currentUser ? `${currentUser.name} 님` : "회원님";
+            authUserName.textContent = currentUser ? `${currentUser.name}님` : "회원님";
         }
 
         const applicantName = orderForm?.querySelector('input[name="applicant_name"]');
