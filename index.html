@@ -1,14 +1,221 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼초담(蔘草談) | 자연이 자라난 시간</title>
+  <meta name="description" content="금산의 자연에서 자란 홍삼과 구절초를 정직하게 담아내는 삼초담 브랜드 페이지입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="brand-mark" href="#top">삼초담 <span>蔘草談</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="sr-only">메뉴 열기</span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="primary-nav">
+        <a href="#story">브랜드 스토리</a>
+        <a href="#values">핵심 가치</a>
+        <a href="#products">제품 소개</a>
+        <a href="#contact">구입 문의</a>
+        <a class="site-nav__lang" href="index_en.html" hreflang="en">ENG</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="container hero__content fade-up">
+        <p class="eyebrow">Time Grown by Nature</p>
+        <h1>자연이 자라난 시간을<br>한 포에 담았습니다.</h1>
+        <p class="hero__body">
+          삼초담은 금산의 토양과 계절을 정직하게 담아낸 건강즙 브랜드입니다.
+          과장보다 원물, 속도보다 시간, 유행보다 꾸준함을 선택합니다.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#products">제품 보기</a>
+          <a class="btn btn--ghost" href="#story">브랜드 이야기</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--story" id="story">
+      <div class="container story-grid">
+        <div class="story-grid__copy fade-up">
+          <p class="eyebrow">Brand Story</p>
+          <h2>금산의 흙과 계절에서 시작한 이름</h2>
+          <p>
+            삼초담은 인삼과 구절초가 자라는 시간을 함부로 단축하지 않습니다.
+            원물이 가진 본연의 향과 결을 살리기 위해, 덜어내는 방식으로 브랜드를 설계했습니다.
+          </p>
+          <p>
+            건강을 위한 선택이 복잡할 필요는 없습니다. 무엇이 들어갔는지,
+            어디서 자랐는지, 왜 이 맛이 나는지만 분명하면 충분합니다.
+          </p>
+        </div>
+        <figure class="story-grid__visual fade-in">
+          <img src="assets/images/brand-story.png" alt="삼초담 브랜드 스토리 이미지">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section--values" id="values">
+      <div class="container">
+        <div class="section-heading fade-up">
+          <p class="eyebrow">Core Values</p>
+          <h2>삼초담이 지키는 세 가지 기준</h2>
+        </div>
+        <div class="value-list">
+          <article class="value-card fade-up">
+            <span class="value-card__index">01</span>
+            <h3>정직한 원물</h3>
+            <p>원산지와 재배 과정을 분명히 밝히고, 원물의 성격을 해치지 않는 방식으로 담아냅니다.</p>
+          </article>
+          <article class="value-card fade-up">
+            <span class="value-card__index">02</span>
+            <h3>느리게 쌓인 풍미</h3>
+            <p>첨가물로 맛을 덮지 않고, 시간에서 나온 깊이를 그대로 전달하는 것을 우선합니다.</p>
+          </article>
+          <article class="value-card fade-up">
+            <span class="value-card__index">03</span>
+            <h3>매일 이어지는 루틴</h3>
+            <p>특별한 날의 보양이 아니라, 일상에서 오래 이어갈 수 있는 습관으로 제품을 만듭니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--products" id="products">
+      <div class="container">
+        <div class="section-heading fade-up">
+          <p class="eyebrow">Products</p>
+          <h2>금산의 재료를 담은 두 가지 제안</h2>
+        </div>
+        <div class="product-list">
+          <article class="product-card fade-up">
+            <div class="product-card__image">
+              <img src="assets/product_red_ginseng.png" alt="프리미엄 홍삼즙">
+            </div>
+            <div class="product-card__body">
+              <p class="product-card__tag">Signature</p>
+              <h3>프리미엄 홍삼즙</h3>
+              <p>
+                금산의 비옥한 토양에서 자란 인삼을 바탕으로 깊은 향과 단단한 여운을 담았습니다.
+                매일 한 포, 몸을 살피는 루틴에 가장 잘 어울리는 제품입니다.
+              </p>
+              <ul class="meta-list">
+                <li>금산 인삼 기반</li>
+                <li>차분하고 깊은 풍미</li>
+                <li>일상 보양 루틴 제안</li>
+              </ul>
+            </div>
+          </article>
+          <article class="product-card product-card--reverse fade-up">
+            <div class="product-card__image">
+              <img src="assets/product_gujeolcho.png" alt="자연 구절초즙">
+            </div>
+            <div class="product-card__body">
+              <p class="product-card__tag">Seasonal Calm</p>
+              <h3>자연 구절초즙</h3>
+              <p>
+                예로부터 꾸준히 즐겨온 구절초의 결을 부드럽게 담았습니다.
+                편안하고 따뜻한 인상을 지닌 제품으로, 몸의 리듬을 다독이는 데 어울립니다.
+              </p>
+              <ul class="meta-list">
+                <li>구절초 중심 배합</li>
+                <li>부드럽고 편안한 인상</li>
+                <li>가벼운 휴식 같은 한 포</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--cta">
+      <div class="container cta-panel fade-up">
+        <p class="eyebrow">Daily Ritual</p>
+        <h2>몸을 챙기는 시간도<br>브랜드의 태도처럼 단정하게.</h2>
+        <p>한 번의 강한 인상보다 오래 남는 신뢰를 위해, 삼초담은 원물과 설명을 과장하지 않습니다.</p>
+        <a class="btn btn--primary" href="#contact">상담 남기기</a>
+      </div>
+    </section>
+
+    <section class="section section--contact" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-copy fade-up">
+          <p class="eyebrow">Contact</p>
+          <h2>구입과 제휴 문의를 남겨주세요.</h2>
+          <p>
+            제품 상담, 단체 구매, 제휴 문의 등 필요한 내용을 남겨주시면 순차적으로 확인 후 안내드립니다.
+          </p>
+          <dl class="contact-facts">
+            <div>
+              <dt>브랜드</dt>
+              <dd>삼초담(蔘草談)</dd>
+            </div>
+            <div>
+              <dt>주요 원물</dt>
+              <dd>금산 홍삼, 구절초</dd>
+            </div>
+            <div>
+              <dt>문의 유형</dt>
+              <dd>제품 상담 / 단체 구입 / 제휴 제안</dd>
+            </div>
+          </dl>
+        </div>
+        <form class="contact-form fade-up">
+          <label>
+            <span>이름</span>
+            <input type="text" name="name" placeholder="이름을 입력하세요">
+          </label>
+          <label>
+            <span>연락처</span>
+            <input type="text" name="contact" placeholder="연락 가능한 번호 또는 이메일">
+          </label>
+          <label>
+            <span>관심 제품</span>
+            <select name="product">
+              <option>프리미엄 홍삼즙</option>
+              <option>자연 구절초즙</option>
+              <option>두 제품 모두</option>
+              <option>기타 문의</option>
+            </select>
+          </label>
+          <label>
+            <span>문의 내용</span>
+            <textarea name="message" rows="5" placeholder="필요한 내용을 남겨주세요."></textarea>
+          </label>
+          <button class="btn btn--primary" type="submit">문의 보내기</button>
+          <p class="form-note">현재 데모 페이지이므로 제출 시 실제 전송 없이 안내 메시지만 표시됩니다.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>
+        <a class="brand-mark brand-mark--footer" href="#top">삼초담 <span>蔘草談</span></a>
+        <p class="site-footer__copy">자연이 자라난 시간을 담아내는 건강즙 브랜드</p>
+      </div>
+      <div class="site-footer__links">
+        <a href="#story">브랜드 스토리</a>
+        <a href="#products">제품 소개</a>
+        <a href="#contact">구입 문의</a>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="script.js"></script>
 </body>
 </html>
