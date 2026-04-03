@@ -12,6 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const shippingForm = document.querySelector("#shipping-form");
     const shippingFeedback = document.querySelector("#shipping-feedback");
     const fadeTargets = document.querySelectorAll(".fade-up, .fade-in");
+    const productModal = document.querySelector("#product-modal");
+    const productOpenButtons = document.querySelectorAll("[data-product-open]");
+    const productCloseButtons = document.querySelectorAll("[data-product-close]");
+    const productModalImage = document.querySelector("#product-modal-image");
+    const productModalTag = document.querySelector("#product-modal-tag");
+    const productModalTitle = document.querySelector("#product-modal-title");
+    const productModalHighlight = document.querySelector("#product-modal-highlight");
+    const productModalDesc1 = document.querySelector("#product-modal-desc1");
+    const productModalDesc2 = document.querySelector("#product-modal-desc2");
+    const productModalSubtitle = document.querySelector("#product-modal-subtitle");
+    const productModalStory = document.querySelector("#product-modal-story");
+    const productModalPoints = document.querySelector("#product-modal-points");
+    const productModalInstructions = document.querySelector("#product-modal-instructions");
+    const productModalSource = document.querySelector("#product-modal-source");
     const adminModal = document.querySelector("#admin-modal");
     const adminOpenButtons = document.querySelectorAll("[data-admin-open]");
     const adminCloseButtons = document.querySelectorAll("[data-admin-close]");
@@ -29,6 +43,124 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmed: "상담 완료",
         shipped: "배송 진행",
         delivered: "배송 완료"
+    };
+
+    const productDetails =     {
+            "red-ginseng": {
+                    "tag": "자연에서 자란 원료를 정직하게 담았습니다",
+                    "title": "프리미엄 홍삼즙",
+                    "image": "assets/images/red-ginseng.png",
+                    "highlight": "비교불가의 대용량 110ml × 50포",
+                    "desc1": "1포에 \"비교불가의 용량(약 110ml)\"을 담았습니다. 시중 용량(90ml)보다 약 20% 이상의 넉넉한 용량입니다.",
+                    "desc2": "또한 시중의 홍삼달임액은 30포가 보통이지만, 과감하게 50포를 드립니다!",
+                    "subtitle": "가족이 먹기 위해 시작된 건강한 이야기",
+                    "story": "금산의 비옥한 토양에서 직접 땀 흘려 재배한 인삼으로 제조한 홍삼만을 엄선하여 정성껏 달였습니다. 첨가물 한 방울 없이 자연 그대로 응축시킨 깊은 풍미가 매일 한 잔, 몸을 생각하는 작은 습관으로 이어지길 바랍니다.",
+                    "points": [
+                            {
+                                    "tag": "철학1",
+                                    "content": "자연에서 자란 원료를 정직하게 담았습니다"
+                            },
+                            {
+                                    "tag": "철학2",
+                                    "content": "매일 한 잔, 몸을 생각하는 작은 습관"
+                            },
+                            {
+                                    "tag": "철학3",
+                                    "content": "가족이 먹기 위해 시작된 건강한 이야기"
+                            },
+                            {
+                                    "tag": "철학4",
+                                    "content": "바쁜 일상 속, 균형을 위한 따뜻한 선택"
+                            }
+                    ],
+                    "instructions": [
+                            {
+                                    "title": "1. 기본 음용 방법",
+                                    "text": [
+                                            "1일 1~2회, 1포 섭취",
+                                            "그대로 마시거나, 기호에 따라 물에 희석 가능",
+                                            "파우치를 가볍게 흔든 후 섭취"
+                                    ]
+                            },
+                            {
+                                    "title": "2. 시간대별 추천 음용",
+                                    "text": [
+                                            "아침: 공복/식후 모두 가능. 하루 컨디션을 끌어올리는 효과",
+                                            "오후: 점심 이후 나른할 때 1포, 업무 집중력 유지",
+                                            "운동 전후: 운동 전 체력 보강, 운동 후 회복 보조"
+                                    ]
+                            },
+                            {
+                                    "title": "3. 음용 팁",
+                                    "text": [
+                                            "쓴맛이 강할 경우 꿀이나 따뜻한 물에 희석",
+                                            "너무 뜨거운 물은 피하는 것이 좋습니다.",
+                                            "카페인 음료와 동시 섭취는 줄이는 것이 좋습니다."
+                                    ]
+                            },
+                            {
+                                    "title": "4. 주의사항",
+                                    "text": [
+                                            "과다 섭취 시 두통·불면 가능성이 있으며, 늦은 밤 섭취는 피하는 것이 좋습니다.",
+                                            "고혈압, 특정 질환, 약 복용 중일 경우 섭취에 주의 및 상담을 권장합니다."
+                                    ]
+                            }
+                    ]
+            },
+            "marsh-orchid": {
+                    "tag": "어머니의 지혜, 자연의 편안함",
+                    "title": "자연 구절초즙",
+                    "image": "assets/images/marsh-orchid.png",
+                    "highlight": "비교불가의 대용량 115~120ml × 50포",
+                    "desc1": "1포에 \"비교불가의 용량(약 115~120ml)\"을 담았습니다. 시중 용량(90ml)보다 약 20~25% 이상의 넉넉한 용량입니다.",
+                    "desc2": "또한 시중의 액기스는 30포가 보통이지만, 과감하게 50포를 드립니다!",
+                    "subtitle": "딸이 시집갈 때 꼭 챙겨간 이유",
+                    "story": "음력 9월 9일이 되면 아홉 개의 마디가 생긴다 하여 구절초라 불립니다. 예로부터 딸이 시집갈 때 혼수 품목으로 꼭 챙겨 보내 상비약으로 달여 마시게 했던 약재이기도 합니다. 현대에도 구절초 베이비라는 말이 있을 정도로 여성에게 특효로 알려져 있습니다.",
+                    "points": [
+                            {
+                                    "tag": "효능1",
+                                    "content": "강장, 항균, 항염, 면역증진 효과"
+                            },
+                            {
+                                    "tag": "효능2",
+                                    "content": "소염, 진통, 스트레스 완화"
+                            },
+                            {
+                                    "tag": "효능3",
+                                    "content": "수족냉증 등 냉증 개선"
+                            },
+                            {
+                                    "tag": "효능4",
+                                    "content": "생리불순, 난임 등 여성 건강 관리"
+                            },
+                            {
+                                    "tag": "효능5",
+                                    "content": "심혈관 질환 예방 및 혈관 보호"
+                            }
+                    ],
+                    "source": {
+                            "url": "https://www.hidoc.co.kr/healthstory/news/C0000493617",
+                            "text": "참고 자료 | 하이닥"
+                    },
+                    "instructions": [
+                            {
+                                    "title": "1. 기본 섭취량",
+                                    "text": "1일 1~2회, 1회 1포 섭취를 권장하며 파우치를 잘 흔든 후 그대로 드시면 됩니다."
+                            },
+                            {
+                                    "title": "2. 처음 드실 때",
+                                    "text": "구절초액을 컵에 따르고 뜨거운 물을 섞어서 드세요. 하루 1포 섭취를 추천합니다."
+                            },
+                            {
+                                    "title": "3. 섭취 팁",
+                                    "text": "한두 달 정도 드신 후에 점점 양을 늘리셔도 되지만 하루 두 포를 넘기지 않는 것을 추천합니다."
+                            },
+                            {
+                                    "title": "4. 주의사항",
+                                    "text": "식전·식후 모두 무관하나, 위가 약하시거나 공복에 속이 불편하면 식후 섭취를 권장합니다. 카페인 음료와 동시 섭취는 피하시고, 특정 질환이나 임신 중인 경우 전문 상담 후 드세요."
+                            }
+                    ]
+            }
     };
 
     const syncHeader = () => {
@@ -178,6 +310,84 @@ document.addEventListener("DOMContentLoaded", () => {
         renderOrders();
     };
 
+    const syncModalLock = () => {
+        const hasOpenModal = (productModal && productModal.classList.contains("is-open")) || (adminModal && adminModal.classList.contains("is-open"));
+        document.body.classList.toggle("modal-open", hasOpenModal);
+    };
+
+    const renderProductModal = (productId) => {
+        const data = productDetails[productId];
+        if (!data || !productModalImage || !productModalTitle) {
+            return;
+        }
+
+        productModalImage.src = data.image;
+        productModalImage.alt = data.title;
+        productModalTag.textContent = data.tag;
+        productModalTitle.textContent = data.title;
+        productModalHighlight.textContent = data.highlight;
+        productModalDesc1.textContent = data.desc1;
+        productModalDesc2.textContent = data.desc2;
+        productModalSubtitle.textContent = data.subtitle;
+        productModalStory.textContent = data.story;
+
+        productModalPoints.innerHTML = "";
+        data.points.forEach((point) => {
+            const article = document.createElement("article");
+            article.className = "product-modal__point";
+            const strong = document.createElement("strong");
+            strong.textContent = point.tag;
+            const span = document.createElement("span");
+            span.textContent = point.content;
+            article.append(strong, span);
+            productModalPoints.appendChild(article);
+        });
+
+        productModalInstructions.innerHTML = "";
+        data.instructions.forEach((item) => {
+            const article = document.createElement("article");
+            article.className = "product-modal__instruction";
+            const title = document.createElement("h3");
+            title.textContent = item.title;
+            const desc = document.createElement("p");
+            desc.textContent = Array.isArray(item.text) ? item.text.map((line) => `• ${line}`).join("\n") : item.text;
+            article.append(title, desc);
+            productModalInstructions.appendChild(article);
+        });
+
+        if (data.source) {
+            productModalSource.classList.remove("hidden");
+            productModalSource.innerHTML = "";
+            const link = document.createElement("a");
+            link.href = data.source.url;
+            link.target = "_blank";
+            link.rel = "noreferrer";
+            link.textContent = data.source.text;
+            productModalSource.appendChild(link);
+        } else {
+            productModalSource.classList.add("hidden");
+            productModalSource.innerHTML = "";
+        }
+    };
+
+    const openProductModal = (productId) => {
+        if (!productModal) {
+            return;
+        }
+        renderProductModal(productId);
+        productModal.classList.add("is-open");
+        productModal.setAttribute("aria-hidden", "false");
+        syncModalLock();
+    };
+
+    const closeProductModal = () => {
+        if (!productModal) {
+            return;
+        }
+        productModal.classList.remove("is-open");
+        productModal.setAttribute("aria-hidden", "true");
+        syncModalLock();
+    };
     const openAdminModal = () => {
         if (!adminModal) {
             return;
@@ -185,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         adminModal.classList.add("is-open");
         adminModal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("modal-open");
+        syncModalLock();
 
         if (window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "active") {
             showAdminDashboard();
@@ -201,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         adminModal.classList.remove("is-open");
         adminModal.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("modal-open");
+        syncModalLock();
     };
 
     syncHeader();
@@ -248,6 +458,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fadeTargets.forEach((target) => observer.observe(target));
     }
+
+    productOpenButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            openProductModal(button.getAttribute("data-product-open"));
+        });
+    });
+
+    productCloseButtons.forEach((button) => {
+        button.addEventListener("click", closeProductModal);
+    });
 
     if (orderForm && formFeedback) {
         orderForm.addEventListener("submit", (event) => {
@@ -368,6 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
+            closeProductModal();
             closeAdminModal();
         }
     });
