@@ -21,11 +21,29 @@
         <span></span>
       </button>
       <nav class="site-nav" id="primary-nav">
-        <a href="#story">Story</a>
-        <a href="#values">Values</a>
-        <a href="#products">Products</a>
-        <a href="#contact">Contact</a>
-        <a class="site-nav__lang" href="index.html" hreflang="ko">KOR</a>
+        <div class="site-nav__group">
+          <a href="#story" class="site-nav__parent">Brand Story</a>
+          <div class="site-nav__submenu">
+            <a href="#story">Story</a>
+            <a href="#values">Values</a>
+          </div>
+        </div>
+        <div class="site-nav__group">
+          <a href="#products" class="site-nav__parent">Products</a>
+          <div class="site-nav__submenu">
+            <a href="#products">Red Ginseng Juice</a>
+            <a href="#products">Gujeolcho Juice</a>
+          </div>
+        </div>
+        <div class="site-nav__group">
+          <a href="#contact" class="site-nav__parent">Contact</a>
+          <div class="site-nav__submenu">
+            <a href="#contact">Customer Center</a>
+          </div>
+        </div>
+        <a href="#products">Browse Products</a>
+        <button class="site-nav__admin" type="button" data-admin-open>Admin</button>
+        <a class="site-nav__lang" href="index.html" hreflang="ko">KOR/ENG</a>
       </nav>
     </div>
   </header>
