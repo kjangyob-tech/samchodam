@@ -1306,6 +1306,8 @@ body.modal-open {
 
 .site-nav__group {
     position: relative;
+    padding-bottom: 18px;
+    margin-bottom: -18px;
 }
 
 .site-nav__parent {
@@ -1315,12 +1317,12 @@ body.modal-open {
 
 .site-nav__submenu {
     position: absolute;
-    top: calc(100% + 14px);
+    top: calc(100% - 4px);
     left: 50%;
     min-width: 200px;
     display: grid;
     gap: 2px;
-    padding: 12px;
+    padding: 18px 12px 12px;
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(66, 84, 55, 0.12);
