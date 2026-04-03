@@ -233,7 +233,7 @@ textarea {
 .hero__content {
     position: relative;
     z-index: 1;
-    padding: 180px 0 92px;
+    padding: 170px 0 128px;
     max-width: 760px;
     color: #fff;
 }
@@ -770,7 +770,7 @@ body.menu-open {
     }
 
     .hero__content {
-        padding: 152px 0 72px;
+        padding: 144px 0 98px;
     }
 
     .hero__actions,
