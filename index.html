@@ -23,8 +23,21 @@
       <nav class="site-nav" id="primary-nav">
         <a href="#story">브랜드 스토리</a>
         <a href="#values">핵심 가치</a>
-        <a href="#products">제품 소개</a>
-        <a href="#contact">고객센터</a>
+        <div class="site-nav__group">
+          <a href="#products" class="site-nav__parent">제품 소개</a>
+          <div class="site-nav__submenu">
+            <a href="#products">프리미엄 홍삼즙</a>
+            <a href="#products">자연 구절초즙</a>
+            <a href="#faq">자주 묻는 질문</a>
+          </div>
+        </div>
+        <div class="site-nav__group">
+          <a href="#contact" class="site-nav__parent">구입문의</a>
+          <div class="site-nav__submenu">
+            <a href="#payment-info">입금안내</a>
+            <a href="#contact">고객센터</a>
+          </div>
+        </div>
         <button class="site-nav__admin" type="button" data-admin-open>관리자</button>
         <a class="site-nav__lang" href="index_en.html" hreflang="en">ENG</a>
       </nav>
@@ -142,6 +155,29 @@
       </div>
     </section>
 
+    <section class="section section--faq" id="faq">
+      <div class="container">
+        <div class="section-heading fade-up">
+          <p class="eyebrow">FAQ</p>
+          <h2>자주 묻는 질문</h2>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item fade-up">
+            <h3>홍삼즙과 구절초즙은 어떻게 주문하나요?</h3>
+            <p>고객센터의 주문 접수 폼에서 이름, 연락처, 제품, 수량을 남기면 관리자 모드에서 바로 주문 내역을 확인할 수 있습니다.</p>
+          </article>
+          <article class="faq-item fade-up">
+            <h3>신청내역과 배송조회는 어디서 문의하나요?</h3>
+            <p>고객센터의 신청내역/배송조회 영역에서 주문번호와 연락처를 남기면 Formspree로 문의가 접수됩니다.</p>
+          </article>
+          <article class="faq-item fade-up">
+            <h3>입금 확인은 언제 반영되나요?</h3>
+            <p>무통장 입금은 주문자명과 입금자명이 같을 때 가장 빠르게 확인됩니다. 다를 경우 고객센터 메모에 함께 남겨주세요.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--cta">
       <div class="container cta-panel fade-up">
         <p class="eyebrow">Daily Ritual</p>
@@ -181,6 +217,25 @@
           <button class="btn btn--secondary contact-copy__admin" type="button" data-admin-open>관리자 모드 열기</button>
         </div>
         <div class="contact-stack">
+          <section class="contact-form contact-form--info fade-up" id="payment-info" aria-labelledby="payment-info-title">
+            <p class="contact-form__title" id="payment-info-title">구입문의 · 입금안내</p>
+            <p class="contact-form__lead">주문 접수 후 아래 계좌로 입금해 주세요. 입금자명이 다르면 주문 메모나 고객센터 문의에 함께 남겨주세요.</p>
+            <dl class="info-list">
+              <div>
+                <dt>은행명</dt>
+                <dd>농협은행</dd>
+              </div>
+              <div>
+                <dt>예금주</dt>
+                <dd>삼초담</dd>
+              </div>
+              <div>
+                <dt>계좌번호</dt>
+                <dd>351-1298-1023-73</dd>
+              </div>
+            </dl>
+          </section>
+
           <form class="contact-form fade-up" id="order-form">
             <p class="contact-form__title">고객센터 · 주문 접수</p>
             <div class="form-grid">
@@ -282,6 +337,8 @@
       <div class="site-footer__links">
         <a href="#story">브랜드 스토리</a>
         <a href="#products">제품 소개</a>
+        <a href="#faq">자주 묻는 질문</a>
+        <a href="#payment-info">입금안내</a>
         <a href="#contact">고객센터</a>
         <button class="footer-admin-link" type="button" data-admin-open>관리자 모드</button>
       </div>

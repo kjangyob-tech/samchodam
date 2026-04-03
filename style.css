@@ -1035,3 +1035,125 @@ body.modal-open {
 #disqus_thread {
     margin-top: 8px;
 }
+
+.site-nav__group {
+    position: relative;
+}
+
+.site-nav__parent {
+    display: inline-flex;
+    align-items: center;
+}
+
+.site-nav__submenu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    min-width: 200px;
+    display: grid;
+    gap: 2px;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(66, 84, 55, 0.12);
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.site-nav__submenu a {
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--color-text);
+    white-space: nowrap;
+}
+
+.site-nav__submenu a:hover,
+.site-nav__submenu a:focus-visible {
+    background: rgba(66, 84, 55, 0.08);
+}
+
+.site-nav__group:hover .site-nav__submenu,
+.site-nav__group:focus-within .site-nav__submenu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+}
+
+.section--faq {
+    padding-top: 48px;
+}
+
+.faq-list {
+    display: grid;
+    gap: 18px;
+}
+
+.faq-item {
+    padding: 28px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-soft);
+}
+
+.faq-item h3 {
+    margin: 0 0 12px;
+    color: var(--color-ink);
+    font-family: "Noto Serif KR", serif;
+    font-size: 1.35rem;
+}
+
+.faq-item p {
+    margin: 0;
+    color: var(--color-muted);
+}
+
+.info-list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+}
+
+.info-list div {
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(66, 84, 55, 0.05);
+}
+
+.info-list dt {
+    margin-bottom: 4px;
+    color: var(--color-muted);
+    font-size: 0.88rem;
+}
+
+.info-list dd {
+    margin: 0;
+    color: var(--color-ink);
+    font-weight: 700;
+}
+
+@media (max-width: 960px) {
+    .site-nav__group {
+        display: grid;
+        gap: 8px;
+    }
+
+    .site-nav__submenu {
+        position: static;
+        min-width: 0;
+        padding: 0 0 0 12px;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+
+    .site-nav__submenu a {
+        padding: 6px 0;
+    }
+}
